@@ -47,13 +47,21 @@ Then open the printed Jupyter URL on your machine. Compose exposes port `8888` b
 
 ## NVIDIA Brev
 
-Brev can run this repository on a cloud instance using the same Docker setup:
+Brev can run this repository on a cloud instance using the same Docker setup.
+
+For no-cost setup testing, prefer the local Docker workflow above. The Brev CLI catalog is costed per instance type; check current zero-cost options before provisioning:
 
 ```bash
-brev start git@github.com:shanto268/qdw-workshop-materials.git \
-  --name qdw-workshop-materials \
-  --gpu cpu-d3.16vcpu-64gb \
-  --setup-path scripts/brev-setup.sh
+brev search cpu --json | jq '[.[] | select(.price_per_hour == 0)] | length'
+brev search gpu --json | jq '[.[] | select(.price_per_hour == 0)] | length'
+```
+
+When you are ready to provision a Brev instance, this command clones the private repo over SSH and starts the shared Docker Compose environment:
+
+```bash
+brev create qdw-workshop-materials \
+  --type cpu-d3.16vcpu-64gb \
+  --startup-script @scripts/brev-clone-and-setup.sh
 brev open <instance-name> cursor
 ```
 

@@ -1,0 +1,42 @@
+# binder/apt.txt
+
+# --- Build Tools & Essentials ---
+build-essential  # Includes gcc, g++, make, etc.
+cmake
+gfortran         # Fortran compiler (often a Palace dependency)
+pkg-config
+git
+curl
+python3
+gpg
+lsb-release
+python3-distutils 
+python3-venv 
+unzip 
+zip
+wget
+g++
+gcc
+gfortran
+# --- GUI/Visualization & Headless Display ---
+gmsh
+paraview         # Full ParaView. Be mindful this is large. If only Python libs are needed, this is okay.
+xvfb             # For headless display
+python3-opengl   # Python bindings for OpenGL (often needed by visualization tools)
+
+# --- Palace & MPI Dependencies ---
+mpi-default-dev  # Provides an MPI implementation (like OpenMPI) and development files
+libopenblas-dev  # For BLAS/LAPACK (required by Palace)
+zlib1g-dev
+libunwind-dev    # Optional for Palace, but good to include if some configurations need it
+ca-certificates
+coreutils 
+environment-modules
+libopenmpi-dev
+openmpi-bin
+libblas-dev
+liblapack-dev
+libmetis-dev
+libsuperlu-dev
+libhypre-dev
+libmumps-dev

@@ -1,0 +1,93 @@
+#!/bin/bash
+set -e # Exit immediately if a command exits with a non-zero status.
+
+
+# git clone https://github.com/spack/spack.git
+# . spack/share/spack/setup-env.sh
+# spack install hdf5
+
+
+# spack install palace
+# echo "Starting Palace build process..."
+
+# # Define installation prefix for Palace within the user's home directory
+# export PALACE_INSTALL_PREFIX=/home/jovyan/opt/palace 
+# export PALACE_SRC_DIR=/home/jovyan/palace_src
+# export PALACE_BUILD_DIR=/home/jovyan/palace_build
+
+# # Create directories
+# mkdir -p $PALACE_SRC_DIR
+# mkdir -p $PALACE_BUILD_DIR
+# mkdir -p $PALACE_INSTALL_PREFIX
+
+# # Clone the Palace repository
+# echo "Cloning Palace repository..."
+# git clone https://github.com/awslabs/palace.git $PALACE_SRC_DIR
+
+# # Configure Palace using CMake
+# echo "Configuring Palace with CMake..."
+# cd $PALACE_BUILD_DIR
+
+# # Basic CMake configuration.
+# # Ensure no trailing spaces after backslashes for line continuation.
+# # The last argument MUST be $PALACE_SRC_DIR.
+# cmake -DCMAKE_INSTALL_PREFIX=$PALACE_INSTALL_PREFIX \
+#       -DCMAKE_BUILD_TYPE=Release \
+#       -DPALACE_WITH_MPI=ON \
+#       -DPALACE_WITH_OPENMP=ON \
+#       -DPALACE_WITH_SUPERLU=ON \
+#       -DPALACE_WITH_STRUMPACK=OFF \
+#       -DPALACE_WITH_SLEPC=OFF \
+#       -DPALACE_WITH_ARPACK=ON \
+#       -DPALACE_WITH_GPU=OFF \
+#       -DPALACE_BUILD_EXAMPLES=OFF \
+#       -DPALACE_BUILD_TESTS=OFF \
+#       $PALACE_SRC_DIR
+
+# # Build Palace
+# # Use number of available processors, MyBinder usually provides at least 2
+# NUM_PROCS=$(nproc --all)
+# echo "Building Palace using $NUM_PROCS processors..."
+# make -j$NUM_PROCS
+
+# # Install Palace
+# echo "Installing Palace..."
+# make install
+
+# # Add Palace to PATH for the Jupyter environment
+# echo "Configuring environment for Palace..."
+# PROFILE_SCRIPT_PATH="/home/jovyan/.bashrc" 
+
+# echo "" >> $PROFILE_SCRIPT_PATH
+# echo "# Palace Environment Configuration" >> $PROFILE_SCRIPT_PATH
+# echo "export PATH=$PALACE_INSTALL_PREFIX/bin:\$PATH" >> $PROFILE_SCRIPT_PATH
+# echo "export LD_LIBRARY_PATH=$PALACE_INSTALL_PREFIX/lib:\$LD_LIBRARY_PATH" >> $PROFILE_SCRIPT_PATH 
+# echo "export LD_LIBRARY_PATH=$PALACE_INSTALL_PREFIX/lib64:\$LD_LIBRARY_PATH" >> $PROFILE_SCRIPT_PATH # Also check lib64
+
+# # Clean up build directory to save space
+# echo "Cleaning up Palace build directory..."
+# cd /home/jovyan/
+# rm -rf $PALACE_BUILD_DIR
+# # rm -rf $PALACE_SRC_DIR # Keep source if you want to inspect it, remove to save space
+
+# echo "Palace installation complete."
+# echo "Palace executable should be available at $PALACE_INSTALL_PREFIX/bin/palace"
+# echo "You might need to open a new terminal or restart the Jupyter kernel for PATH changes to take effect."
+
+# --- Install SQDMetal ---
+echo "Cloning and installing SQDMetal in editable mode..."
+SQDMETAL_CODE_DIR="${USER_GIT_SRC_DIR}/SQDMetal"
+
+# Ensure a fresh clone if the directory somehow exists (unlikely in clean MyBinder builds)
+if [ -d "${SQDMETAL_CODE_DIR}" ]; then
+  echo "Removing existing SQDMetal directory: ${SQDMETAL_CODE_DIR}"
+  rm -rf "${SQDMETAL_CODE_DIR}"
+fi
+git clone https://github.com/sqdlab/SQDMetal.git "${SQDMETAL_CODE_DIR}"
+
+# Install SQDMetal in editable mode using 'pip' from the active Conda environment.
+# The 'pip' command will correctly point to the Conda environment's pip.
+pip install -e "${SQDMETAL_CODE_DIR}"
+echo "SQDMetal installation complete."
+
+

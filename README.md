@@ -50,14 +50,17 @@ Then open the printed Jupyter URL on your machine. Compose exposes port `8888` b
 Brev can run this repository on a cloud instance using the same Docker setup:
 
 ```bash
-brev start https://github.com/<org-or-user>/<joint-repo>.git
+brev start git@github.com:shanto268/qdw-workshop-materials.git \
+  --name qdw-workshop-materials \
+  --gpu cpu-d3.16vcpu-64gb \
+  --setup-path scripts/brev-setup.sh
 brev open <instance-name> cursor
 ```
 
 From the Brev instance:
 
 ```bash
-cd <joint-repo>
+cd qdw-workshop-materials
 docker compose up -d
 docker compose exec dev bash
 ```

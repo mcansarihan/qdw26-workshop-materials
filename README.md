@@ -1,85 +1,50 @@
 # QDW Workshop Materials
 
-Joint workspace for Quantum Device Workshop materials, with the QDW playground Docker environment at the repository root so the same server/container can run all workshops.
+Joint workspace for Quantum Device Workshop materials and the shared environment used by workshop attendees.
 
-## Repository Layout
+## What Lives Here
 
-- `Dockerfile`, `compose.yaml`, `pyproject.toml`, `uv.lock`: shared QDW playground environment imported from `abhishekchak52/qdw26-playground`.
-- `workshops/tutorials_quantum_device_design/`: Zlatko Minev's workshop materials imported from `zlatko-minev/tutorials_quantum_device_design`.
-- `docs/upstream-qdw26-playground-README.md`: original playground README preserved for reference.
-- `UPSTREAMS.md`: source repositories and imported commit SHAs.
+- `Dockerfile`, `compose.yaml`, `pyproject.toml`, `uv.lock`: shared runtime environment.
+- `workshops/`: self-contained workshop folders, each with a `workshop.yaml` manifest.
+- `shared/`: examples and files intended for more than one workshop.
+- `docs/`: attendee, workshop lead, Brev, and environment notes.
+- `scripts/`: validation, smoke-test, and Brev setup helpers.
 
-## Prerequisites
+## Quick Start
 
-- [Docker](https://docs.docker.com/get-docker/) with the Compose plugin.
-- Optional: [NVIDIA Brev](https://docs.nvidia.com/brev/) for a cloud-hosted workshop server.
-
-## Local Docker
-
-The image installs `uv`, a managed Python, Palace via the QDW playground base image, and locked Python dependencies from `pyproject.toml` / `uv.lock`. Compose bind-mounts this whole repository into `/home/ubuntu/qdw26-playground`, so all workshop folders are visible inside the same container.
+Use whichever access path fits your workflow. All paths should point at the same checked-out materials and shared environment.
 
 ```bash
 docker compose up --build
 ```
 
-With the stack running, basic checks are:
+Then choose an interface:
+
+- JupyterLab: `docker compose exec dev uv run jupyter lab --ip 0.0.0.0 --port 8888 --no-browser`
+- Shell: `docker compose exec dev bash`
+- VS Code or Cursor: attach to the running `dev` container.
+- SSH on Brev: connect to the instance, then use Docker Compose from the repo checkout.
+
+## Current Workshops
+
+- `workshops/quantum-device-design/`: Qiskit Metal, Palace, and SQDMetal tutorial materials.
+
+## Contributor Checks
+
+Before opening a pull request:
 
 ```bash
-docker compose exec dev uv run python main.py
-docker compose exec dev palace --version
-docker compose exec dev bash
+python scripts/validate_workshops.py
+python scripts/check_notebooks.py
+bash -n scripts/*.sh
+docker compose config
 ```
 
-To work on the imported tutorials inside the container:
+If Docker is running locally, also build and smoke-test the image:
 
 ```bash
-docker compose exec dev bash
-cd workshops/tutorials_quantum_device_design
+docker build -t qdw-workshop-materials:local .
+docker run --rm qdw-workshop-materials:local python scripts/smoke_environment.py
 ```
 
-To start JupyterLab from the container:
-
-```bash
-docker compose exec dev uv run jupyter lab --ip 0.0.0.0 --port 8888 --no-browser
-```
-
-Then open the printed Jupyter URL on your machine. Compose exposes port `8888` by default.
-
-## NVIDIA Brev
-
-Brev can run this repository on a cloud instance using the same Docker setup.
-
-For no-cost setup testing, prefer the local Docker workflow above. The Brev CLI catalog is costed per instance type; check current zero-cost options before provisioning:
-
-```bash
-brev search cpu --json | jq '[.[] | select(.price_per_hour == 0)] | length'
-brev search gpu --json | jq '[.[] | select(.price_per_hour == 0)] | length'
-```
-
-When you are ready to provision a Brev instance, this command clones the private repo over SSH and starts the shared Docker Compose environment:
-
-```bash
-brev create qdw-workshop-materials \
-  --type cpu-d3.16vcpu-64gb \
-  --startup-script @scripts/brev-clone-and-setup.sh
-brev open <instance-name> cursor
-```
-
-From the Brev instance:
-
-```bash
-cd qdw-workshop-materials
-docker compose up -d
-docker compose exec dev bash
-```
-
-If the instance was created in the Brev web console, run `brev refresh` locally so the CLI can find it.
-
-## Current Workshop Materials
-
-- Quantum device design tutorials: `workshops/tutorials_quantum_device_design/`
-
-## Notes
-
-- This repo is initialized locally, but no GitHub remote is configured yet.
-- Dependency reconciliation for each workshop should happen here so future workshops share one known-good environment.
+See [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/workshop-lead-guide.md](docs/workshop-lead-guide.md) for the workflow for adding or updating workshop materials.

@@ -10,4 +10,5 @@ Imported on 2026-05-15.
 ## Import Layout
 
 - QDW playground files are kept at the repository root so `docker compose up --build` mounts the full joint repo into the development container.
-- Quantum device design tutorial files are kept under `workshops/tutorials_quantum_device_design/`.
+- Quantum device design tutorial files are kept under `workshops/quantum-device-design/`.
+- Shared Palace examples are kept under `shared/palace_examples/`.

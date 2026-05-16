@@ -1,0 +1,32 @@
+slug: quantum-device-design
+title: Quantum Device Design Tutorials
+leads:
+  - zlatko-minev
+summary: Qiskit Metal, Palace, and SQDMetal tutorials for quantum device design workflows.
+entrypoints:
+  - path: notebooks/intro_to_layout.ipynb
+    kind: notebook
+    description: Introductory layout walkthrough.
+  - path: notebooks/transmon_resonator.ipynb
+    kind: notebook
+    description: Transmon and resonator simulation workflow.
+notebooks:
+  - notebooks/intro_to_layout.ipynb
+  - notebooks/project.ipynb
+  - notebooks/qubit_qubit_coupling.ipynb
+  - notebooks/transmon_resonator.ipynb
+assets:
+  - assets/1.jpg
+  - references/Barends et al, Nature 2014.pdf
+python_dependencies:
+  - jupyter
+  - quantum-metal
+  - sqdmetal
+system_dependencies:
+  - gmsh
+  - palace
+smoke_commands:
+  - test -f notebooks/intro_to_layout.ipynb
+  - test -f notebooks/transmon_resonator.ipynb
+  - python -c "import importlib.util; assert importlib.util.find_spec('qiskit_metal') is not None"
+  - python -c "import importlib.util; assert importlib.util.find_spec('SQDMetal') is not None or importlib.util.find_spec('sqdmetal') is not None"

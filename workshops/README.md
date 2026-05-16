@@ -1,17 +1,20 @@
 # Workshops
 
-Workshop materials live in separate subdirectories so each workshop can evolve independently while sharing the same root Docker environment.
+Each workshop lives in its own folder and declares its entrypoints, dependencies, and smoke checks in `workshop.yaml`.
 
 ## Current Materials
 
-- `tutorials_quantum_device_design/`: Qiskit Metal, Palace, and SQDMetal tutorial materials.
+- `quantum-device-design/`: Qiskit Metal, Palace, and SQDMetal tutorial materials.
 
-## Adding Another Workshop
+## Required Layout
 
-Add new materials under a descriptive subdirectory:
-
-```bash
-mkdir -p workshops/<workshop-name>
+```text
+workshops/<slug>/
+  README.md
+  workshop.yaml
+  notebooks/
+  assets/
+  references/
 ```
 
-If the workshop needs additional Python or system dependencies, update the root `pyproject.toml`, `uv.lock`, or `Dockerfile` so the shared environment remains reproducible.
+Optional files such as Binder notes, datasets, or helper scripts should stay inside the workshop folder unless they are useful across multiple workshops.

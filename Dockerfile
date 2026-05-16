@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 FROM abhishekchak52/palace_env:latest
 
 # Runtime libs for PySide6 / Qt6 (X11, xcb, GL/EGL, fonts) — common import failures without these.
@@ -48,7 +49,7 @@ COPY --from=ghcr.io/astral-sh/uv:0.11.2 /uv /uvx /bin/
 ENV UV_LINK_MODE=copy
 ENV UV_PYTHON_INSTALL_DIR=/opt/uv-python
 
-WORKDIR /home/ubuntu/qdw26-playground
+WORKDIR /home/ubuntu/qdw-workshop-materials
 
 RUN uv python install 3.12
 
@@ -58,12 +59,12 @@ RUN --mount=type=cache,target=/home/ubuntu/.cache/uv \
 --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
 uv sync --locked --no-install-project
 
-# Source is bind-mounted at runtime (see compose.yaml). Run `uv sync --locked` there
-# to install the project into the mounted tree's .venv (e.g. compose `command`).
+# Copy workshop materials after dependency installation so dependency layers stay cacheable.
+COPY --chown=ubuntu:ubuntu . /home/ubuntu/qdw-workshop-materials
 
-RUN chown -R ubuntu:ubuntu /home/ubuntu/qdw26-playground /opt/uv-python
+RUN chown -R ubuntu:ubuntu /home/ubuntu/qdw-workshop-materials /opt/uv-python
 
-ENV PATH="/home/ubuntu/qdw26-playground/.venv/bin:$PATH"
+ENV PATH="/home/ubuntu/qdw-workshop-materials/.venv/bin:$PATH"
 
 
 USER ubuntu

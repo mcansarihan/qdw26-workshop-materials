@@ -1,7 +1,7 @@
 [project]
-name = "qdw26-playground"
+name = "qdw-workshop-materials"
 version = "0.1.0"
-description = "Playground for design and simulation tutorials for QDW 2026"
+description = "Shared workshop environment for Quantum Device Workshop materials"
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 dependencies = [

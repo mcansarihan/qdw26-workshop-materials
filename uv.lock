@@ -2193,7 +2193,7 @@ wheels = [
 ]
 
 [[package]]
-name = "qdw26-playground"
+name = "qdw-workshop-materials"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

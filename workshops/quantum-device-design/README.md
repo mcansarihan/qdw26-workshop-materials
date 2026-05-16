@@ -1,5 +1,21 @@
 # Simulating **Qiskit Metal** Designs with **palace** and **SQDMetal**
 
+## Start Here
+
+Recommended entry notebooks:
+
+1. `notebooks/intro_to_layout.ipynb`
+2. `notebooks/transmon_resonator.ipynb`
+
+Additional notebooks:
+
+- `notebooks/project.ipynb`
+- `notebooks/qubit_qubit_coupling.ipynb`
+
+Supporting files are in `assets/` and `references/`.
+
+## Overview
+
 This tutorial explores the simulation of [Qiskit Metal](https://github.com/qiskit-community/qiskit-metal)  `design` objects using `palace`, facilitated by `SQDMetal`. The design of quantum devices, the foundation of the quantum ecosystem, is a multi-step process. Qiskit Metal endeavors to simplify and organize this undertaking.
 
 **About Qiskit Metal**
@@ -28,7 +44,6 @@ This tutorial aims to provide a working knowledge of how these open-source tools
 
 **Requirements:**
 
-* [ ] Ensure that [`SQDMetal`](https://github.com/sqdlab/SQDMetal) is installed in your environment. This package includes installation of Qiskit Metal.
-* [ ] Ensure that [`palace`](https://github.com/sqdlab/palace) is installed in your environment. Instructions are [here](https://lfl-lab.github.io/SQuADDS/source/resources/palace.html).
+The shared repository environment installs [`SQDMetal`](https://github.com/sqdlab/SQDMetal), Qiskit Metal, and `palace`. If you need additional packages for this workshop, add them to `workshop.yaml` first so maintainers can consolidate them into the shared environment.
 
 Let us begin the exploration.

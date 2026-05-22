@@ -24,6 +24,7 @@ Then choose an interface:
 - Shell: `docker compose exec dev bash`
 - VS Code or Cursor: attach to the running `dev` container.
 - SSH on Brev: connect to the instance, then use Docker Compose from the repo checkout.
+- GUI tools: optional; see `docs/gui-forwarding.md` for display forwarding setup.
 
 Brev/attendee deployments should use the published image:
 

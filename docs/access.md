@@ -32,6 +32,12 @@ docker compose -f compose.deploy.yaml up -d
 docker compose -f compose.deploy.yaml exec dev bash
 ```
 
+## GUI Applications
+
+GUI applications are optional and need a display server on the attendee's local machine. Use `pvpython`, `pvbatch`, notebooks, or terminal workflows when possible; use GUI forwarding only when a desktop window is actually needed.
+
+See [GUI forwarding](gui-forwarding.md) for macOS, Linux, Windows, and remote-host setup notes.
+
 ## Local Terminal
 
 Use Docker Compose directly when developing locally:

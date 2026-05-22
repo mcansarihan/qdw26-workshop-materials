@@ -1,6 +1,13 @@
 # QDW Workshop Materials
 
-Joint workspace for Quantum Device Workshop materials and the shared environment used by workshop attendees.
+Joint workspace for **Quantum Device Workshop** materials and the shared environment used by workshop attendees. End-to-end superconducting qubit chip design: **layout → simulation → analysis**, using only open-source tools.
+
+## The toolchain
+
+- **[Quantum Metal](https://github.com/qiskit-community/qiskit-metal)** (formerly Qiskit Metal, v0.7.x): Python-first chip layout and design API. Defines transmons, resonators, CPW routing, and exports to GDS. Lite-by-default install since v0.7.0 — works headless in Docker / Colab / Brev / Codespaces. We use `quantum-metal[full]` here because the workshop exercises the GUI + meshing + EM pieces.
+- **[SQDMetal](https://github.com/sqdlab/SQDMetal)** (Sydney Quantum Design lab): integration layer that bridges Quantum Metal designs to open-source EM solvers — handles mesh generation, boundary conditions, post-processing.
+- **[Palace](https://github.com/awslabs/palace)** (AWS Labs): scalable open-source FEM solver for full-wave EM and eigenmode simulation. The numerical workhorse behind every simulation in this workshop. Comes pre-installed in the Docker base image (`abhishekchak52/palace_env`).
+- **Analytical framework — Energy Participation Ratio (EPR)**: the method we use to extract qubit Hamiltonian parameters (frequencies, anharmonicities, dispersive shifts, cross-Kerr) from the EM eigenmodes Palace computes. Foundational paper: [Minev et al., *Energy-participation quantization of Josephson circuits*, npj Quantum Information (2021)](https://arxiv.org/abs/2010.00620). Quantum Metal's `EPRanalysis` class implements this; see also the [pyEPR-quantum](https://github.com/zlatko-minev/pyEPR) library.
 
 ## What Lives Here
 
@@ -27,7 +34,20 @@ Then choose an interface:
 
 ## Current Workshops
 
-- `workshops/quantum-device-design/`: Qiskit Metal, Palace, and SQDMetal tutorial materials.
+- **`workshops/quantum-device-design/`** — 4-notebook progression covering the full Metal × SQDMetal × Palace flow:
+  1. `intro_to_layout.ipynb` — Quantum Metal basics: DesignPlanar, components, GDS export, `qm.view()`.
+  2. `transmon_resonator.ipynb` — capacitance + eigenmode simulation of a transmon coupled to a readout resonator, EPR analysis extracts qubit frequency / anharmonicity / dispersive shift.
+  3. `qubit_qubit_coupling.ipynb` — two-qubit chip with shared bus, eigenmode + EPR for the cross-Kerr.
+  4. `project.ipynb` — open-ended design challenge for attendees.
+
+  See [docs/access.md](docs/access.md) for how to run + troubleshooting (Apple Silicon notes, JupyterLab token gotchas, port collisions, …).
+
+## Further reading on the analytical framework
+
+- **EPR (Energy Participation Ratio)** — Minev, Leghtas, et al., [*Energy-participation quantization of Josephson circuits*](https://arxiv.org/abs/2010.00620), npj Quantum Information **7**, 131 (2021). The method behind extracting Hamiltonian parameters from EM eigenmodes.
+- **EPR review / tutorial** — Minev, [*Energy participation approach to the design of quantum Josephson circuits*](https://arxiv.org/abs/2010.00620) — concept overview; explains why we care about modal participation ratios when designing real chips.
+- **Black-Box Quantization** — Nigg et al., [*Black-Box Superconducting Circuit Quantization*](https://arxiv.org/abs/1204.0587), PRL 108, 240502 (2012). Earlier framework that EPR generalises.
+- **Quantum Metal tutorials & docs** — [https://qiskit-community.github.io/qiskit-metal/](https://qiskit-community.github.io/qiskit-metal/) — the upstream package's full tutorial set, including 40+ notebooks covering qubit / resonator / route variants beyond what this workshop touches.
 
 ## Contributor Checks
 

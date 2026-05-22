@@ -47,22 +47,28 @@ RUN apt-get update && apt-get install -y \
 COPY --from=ghcr.io/astral-sh/uv:0.11.2 /uv /uvx /bin/
 
 ENV UV_LINK_MODE=copy
+# Put uv-managed Pythons in a shared location both root (build-time) and
+# ubuntu (runtime, via the USER directive at the bottom) can read.
+# ``UV_PYTHON_INSTALL_DIR`` is honoured by ``uv sync`` for the python lookup,
+# AND uv sync will install Python here itself if it's missing — so we don't
+# need a separate ``uv python install`` step.
 ENV UV_PYTHON_INSTALL_DIR=/opt/uv-python
 
 WORKDIR /home/ubuntu/qdw-workshop-materials
 
-# Python install + dependency sync in a SINGLE RUN so the python uv installs
-# (under UV_PYTHON_INSTALL_DIR) is visible to the immediately-following sync.
-# Previously these were two separate RUN steps with a cache-mount on step 2,
-# which wiped uv's index of installed pythons between steps and produced
-# "Python interpreter not found at /opt/uv-python/cpython-3.12.X-..." even
-# though step 1 had just installed it.
+# Single step: sync installs both Python (if missing) AND project deps.
+# We previously had a separate ``uv python install`` step but uv 0.11.x
+# disagrees with itself about where that step puts Python vs where the
+# subsequent ``uv sync`` looks for it (both ``UV_PYTHON_INSTALL_DIR`` env
+# var and ``--install-dir`` flag were ignored by ``uv python install``,
+# producing "Python interpreter not found at /opt/uv-python/...").
+# Letting ``uv sync`` do the install in the same invocation as the lookup
+# guarantees the two stay in agreement.
 RUN --mount=type=cache,target=/home/ubuntu/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     --mount=type=bind,source=.python-version,target=.python-version \
-    uv python install --install-dir /opt/uv-python 3.12 \
- && uv sync --locked --no-install-project
+    uv sync --locked --no-install-project
 
 # Copy workshop materials after dependency installation so dependency layers stay cacheable.
 COPY --chown=ubuntu:ubuntu . /home/ubuntu/qdw-workshop-materials

@@ -48,22 +48,40 @@ RUN apt-get update && apt-get install -y \
 COPY --from=ghcr.io/astral-sh/uv:0.11.2 /uv /uvx /bin/
 
 ENV UV_LINK_MODE=copy
-ENV UV_PYTHON_INSTALL_DIR=/opt/uv-python
+ENV UV_PYTHON_DOWNLOADS=automatic
+
+# Note on Python install location:
+# Earlier versions of this Dockerfile set UV_PYTHON_INSTALL_DIR=/opt/uv-python
+# to keep the managed Python in a shared location (both root at build time
+# and the ubuntu user at runtime). But uv 0.11.x silently ignores that env
+# var (and the --install-dir flag) for the install step — Python lands in
+# /root/.local/share/uv/python regardless — while still respecting it for
+# the lookup step, producing "Python interpreter not found" errors.
+# Dropping the override here so install and lookup both use uv's default.
+# The venv created by ``uv sync`` lives at .venv/ (chowned to ubuntu via
+# the COPY below) and contains a symlink to the managed Python in
+# /root/.local/share/uv/python. The chown line further down ensures the
+# ubuntu user can read those Python files at runtime.
 
 WORKDIR /home/ubuntu/qdw-workshop-materials
 
-RUN uv python install 3.12
-
-# Install dependencies
-RUN --mount=type=cache,target=/home/ubuntu/.cache/uv \
---mount=type=bind,source=uv.lock,target=uv.lock \
---mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-uv sync --locked --no-install-project
+# uv sync installs Python (since UV_PYTHON_DOWNLOADS=automatic) and the
+# project deps in one shot — keeping install and lookup paths consistent.
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=.python-version,target=.python-version \
+    uv sync --locked --no-install-project
 
 # Copy workshop materials after dependency installation so dependency layers stay cacheable.
 COPY --chown=ubuntu:ubuntu . /home/ubuntu/qdw-workshop-materials
 
-RUN chown -R ubuntu:ubuntu /home/ubuntu/qdw-workshop-materials /opt/uv-python
+# Chown the workshop dir + the uv-managed Python install so the runtime
+# ``ubuntu`` user (set below) can read both. /root/.local/share/uv/python
+# is where uv 0.11.x puts its managed interpreters; the venv at .venv/
+# symlinks into this directory, so it must remain readable post-USER switch.
+RUN chown -R ubuntu:ubuntu /home/ubuntu/qdw-workshop-materials \
+ && chmod -R a+rX /root/.local/share/uv/python 2>/dev/null || true
 
 ENV PATH="/home/ubuntu/qdw-workshop-materials/.venv/bin:$PATH"
 

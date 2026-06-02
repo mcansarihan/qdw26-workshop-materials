@@ -16,6 +16,9 @@ wheels/
 todo.md
 attendee-instructions.md
 
+# Avoid redistributing paper PDFs unless redistribution rights are explicit.
+workshops/**/references/*.pdf
+
 # Local credentials and machine-specific deployment settings
 .env
 .env.*
@@ -29,3 +32,8 @@ id_ed25519*
 token.*
 secret.*
 secrets.*
+
+# Runtime artifacts from notebook execution
+workshops/**/my_first_chip.py
+workshops/**/shot*.png
+workshops/**/*.gds

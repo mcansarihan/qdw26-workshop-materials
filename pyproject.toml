@@ -13,7 +13,7 @@ dependencies = [
     "mistune>=3.2.1",
     "nbconvert>=7.17.1",
     "notebook>=7.5.6",
-    "quantum-metal[full]>=0.7.1",
+    "quantum-metal[full]>=0.7.3",
     "schemdraw>=0.21",
     "sqdmetal",
     "urllib3>=2.7.0",
@@ -21,7 +21,17 @@ dependencies = [
 
 [tool.uv.sources]
 sqdmetal = { git = "https://github.com/sqdlab/SQDMetal.git" }
-# quantum-metal — was pinned to abhishekchak52/qiskit-metal@gui-import-isolation,
-# a pre-release fork that's now mainline as quantum-metal v0.7.0+. Pulling from
-# PyPI now; see PR description for full upstream changes (lite-flip, qm.view()
-# headless viewer, friendly missing-dep errors, etc).
+# quantum-metal floor: v0.7.3 (released Jun 2026). Pulls in:
+#   - v0.7.0: lite-by-default install (Qt, Ansys, gmsh now opt-in extras).
+#   - v0.7.1: friendly missing-dep errors, [mesh] alias, docs polish.
+#   - v0.7.2: qm.gui(design) factory (auto-picks MetalGUI vs MetalGUIHeadless
+#     based on the environment), MetalGUIHeadless inline matplotlib viewer
+#     with the full tutorial-facing API, QComponent gallery, tutorial
+#     restructure (1.1 Quick start first).
+#   - v0.7.3: qm.show_inline(fig) backend-agnostic display helper
+#     (handles Qt6Agg → inline rendering in Jupyter), PlotCanvas.zoom_on_components
+#     bug fix (double-click in QComponents table no longer crashes),
+#     gui.highlight_components Qt-mode visibility fix (canvas.refresh now
+#     double-flushes through draw_idle so annotations show on first call).
+#     All required by the workshop notebooks here.
+# No upper bound — attendees pick up future v0.7.x patches automatically.

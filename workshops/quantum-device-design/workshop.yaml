@@ -4,17 +4,18 @@ leads:
   - zlatko-minev
 summary: Qiskit Metal, Palace, and SQDMetal tutorials for quantum device design workflows.
 entrypoints:
-  - path: notebooks/intro_to_layout.ipynb
+  - path: notebooks/01_welcome.ipynb
     kind: notebook
-    description: Introductory layout walkthrough.
-  - path: notebooks/transmon_resonator.ipynb
+    description: Welcome — render your first transmon in three cells, then learn the environment.
+  - path: notebooks/02_first_chip_layout.ipynb
     kind: notebook
-    description: Transmon and resonator simulation workflow.
+    description: First chip layout — junction, transmon, CPW resonator, dispersive readout, launchpad.
 notebooks:
-  - notebooks/intro_to_layout.ipynb
-  - notebooks/project.ipynb
-  - notebooks/qubit_qubit_coupling.ipynb
-  - notebooks/transmon_resonator.ipynb
+  - notebooks/01_welcome.ipynb
+  - notebooks/02_first_chip_layout.ipynb
+  - notebooks/03_transmon_and_resonator.ipynb
+  - notebooks/04_qubit_qubit_coupling.ipynb
+  - notebooks/05_project.ipynb
 assets:
   - assets/1.jpg
 python_dependencies:
@@ -25,7 +26,7 @@ system_dependencies:
   - gmsh
   - palace
 smoke_commands:
-  - test -f notebooks/intro_to_layout.ipynb
-  - test -f notebooks/transmon_resonator.ipynb
+  - test -f notebooks/01_welcome.ipynb
+  - test -f notebooks/02_first_chip_layout.ipynb
   - python -c "import importlib.util; assert importlib.util.find_spec('qiskit_metal') is not None"
   - python -c "import importlib.util; assert importlib.util.find_spec('SQDMetal') is not None or importlib.util.find_spec('sqdmetal') is not None"

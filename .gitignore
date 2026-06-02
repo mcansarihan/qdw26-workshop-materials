@@ -32,3 +32,8 @@ id_ed25519*
 token.*
 secret.*
 secrets.*
+
+# Runtime artifacts from notebook execution
+workshops/**/my_first_chip.py
+workshops/**/shot*.png
+workshops/**/*.gds

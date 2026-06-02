@@ -2128,7 +2128,7 @@ requires-dist = [
     { name = "mistune", specifier = ">=3.2.1" },
     { name = "nbconvert", specifier = ">=7.17.1" },
     { name = "notebook", specifier = ">=7.5.6" },
-    { name = "quantum-metal", extras = ["full"], specifier = ">=0.7.2" },
+    { name = "quantum-metal", extras = ["full"], specifier = ">=0.7.3" },
     { name = "schemdraw", specifier = ">=0.21" },
     { name = "sqdmetal", git = "https://github.com/sqdlab/SQDMetal.git" },
     { name = "urllib3", specifier = ">=2.7.0" },
@@ -2148,7 +2148,7 @@ wheels = [
 
 [[package]]
 name = "quantum-metal"
-version = "0.7.2"
+version = "0.7.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "addict" },
@@ -2166,9 +2166,9 @@ dependencies = [
     { name = "scqubits", version = "4.3.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform != 'darwin'" },
     { name = "shapely" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/55/ca/a307d6b632290dc6ec20058d6dab2b4788ea7bfeea02a95f4d58d109d9be/quantum_metal-0.7.2.tar.gz", hash = "sha256:b1e74b8a0492929d0c7d5895cb8538809196fa3103934de9bb7d33fe282ef848", size = 4678887, upload-time = "2026-06-01T00:32:38.842Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8e/b5/a47fa10066c4efd17f7a3805d73e94408447f086279a5f7aa072f07234d5/quantum_metal-0.7.3.tar.gz", hash = "sha256:31867d51f943f10eb21e7181ccbb6857d07d39c096b7baca6ae1501ba29df4cb", size = 4680368, upload-time = "2026-06-02T02:02:01.853Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d3/7b/a257c97031e4c4681252cc045eb7a631f32c9ed8b1cf5d2bef12783740f9/quantum_metal-0.7.2-py3-none-any.whl", hash = "sha256:d244d34bb91cdc29762c723141fa963ac807d5015e05bbd45bb9de6664a214f1", size = 5069007, upload-time = "2026-06-01T00:32:37.041Z" },
+    { url = "https://files.pythonhosted.org/packages/2d/15/9f09413db5d178d91bf216dbb3db92859dfab4e270b53b758a9a2c9305f7/quantum_metal-0.7.3-py3-none-any.whl", hash = "sha256:9f37ead68121034b44496030884b5f4dd896c8bf8305705274c5ec17ee3856b4", size = 5071228, upload-time = "2026-06-02T02:02:03.381Z" },
 ]
 
 [package.optional-dependencies]

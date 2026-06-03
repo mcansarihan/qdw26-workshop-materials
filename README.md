@@ -3,8 +3,9 @@
 Shared workshop materials and runtime environment for the Quantum Device
 Workshop 2026.
 
-The environment supports layout, electromagnetic simulation, and circuit
-analysis workflows using Quantum Metal, SQDMetal, Palace, Gmsh, ParaView, and
+The environment supports layout, electromagnetic simulation, visualization, and
+circuit-analysis workflows using Quantum Metal, SQDMetal, Palace, Gmsh,
+ParaView, KLayout, SQuADDS, scqubits, scikit-rf, PyPalace, meshwell, and
 JupyterLab.
 
 ## Contents
@@ -50,7 +51,8 @@ Use whichever interface fits the session:
 - JupyterLab for notebooks.
 - VS Code or Cursor for editor-based work.
 - SSH or terminal for command-line work.
-- GUI forwarding for ParaView or Qt-based tools when a desktop window is needed.
+- GUI forwarding for ParaView, KLayout, or Qt-based tools when a desktop window
+  is needed.
 
 See [docs/access.md](docs/access.md) and
 [docs/gui-forwarding.md](docs/gui-forwarding.md).

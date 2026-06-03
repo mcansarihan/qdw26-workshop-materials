@@ -1,10 +1,12 @@
 # Workshops
 
-Each workshop lives in its own folder and declares its entrypoints, dependencies, and smoke checks in `workshop.yaml`.
+Each workshop lives in its own folder and declares its entrypoints,
+dependencies, and smoke checks in `workshop.yaml`.
 
 ## Current Materials
 
-- `quantum-device-design/`: Qiskit Metal, Palace, and SQDMetal tutorial materials.
+- `quantum-device-design/`: Quantum Metal, Palace, SQDMetal, and related
+  quantum-device design tutorial materials.
 
 ## Required Layout
 

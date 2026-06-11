@@ -7,16 +7,18 @@ workspace.
 
 You can work however you prefer:
 
-- **Section 1 — Browser (JupyterLab)** ⭐ *recommended*: nothing to install, no
-  setup — open one tab and the environment (kernel, all packages) is already
-  selected for you. This is a full editor *and* notebook environment.
-- **Section 2 — GUI apps in the browser** (KLayout, the Qiskit Metal GUI,
+- **Section 1 — JupyterLab in your browser** ⭐ *recommended*: nothing to
+  install — open one tab and the environment (kernel, all packages) is already
+  selected for you. A full editor *and* notebook environment.
+- **Section 2 — VS Code in your browser**: a real VS Code, running in your
+  workspace, with the environment already selected. For people who prefer VS Code.
+- **Section 3 — GUI apps in the browser** (KLayout, the Qiskit Metal GUI,
   ParaView): for the design project, when you want real desktop tools.
-- **(Advanced) VS Code / Cursor**: supported but fiddlier on Brev — see the note
-  near the end. Most people should just use JupyterLab.
 
-**If you just want to start fast, use Section 1.** Everything shares the same
-files and environment, and you can switch anytime.
+All three are just browser tabs — **no SSH, no local install, nothing to
+configure.** They share the same files and environment; switch anytime. (Prefer
+to run on your *own* machine instead? See "Run everything locally with Docker" at
+the end.)
 
 ---
 
@@ -31,22 +33,23 @@ files and environment, and you can switch anytime.
 
 On the **first** start, the workspace automatically pulls the prebuilt workshop
 image and launches everything (this one‑time step takes a few minutes). When
-it's done, two services are already running inside your workspace:
+it's done, three services are already running inside your workspace:
 
 | Service | Port | What it's for |
 |---|---|---|
 | JupyterLab | `8888` | Run the notebooks in your browser (Section 1) |
-| Web desktop (noVNC) | `6080` | Open GUI apps like KLayout (Section 2) |
+| VS Code (code‑server) | `8080` | A full VS Code in your browser (Section 2) |
+| Web desktop (noVNC) | `6080` | Open GUI apps like KLayout (Section 3) |
 
-You don't need to start anything by hand — both come back automatically every
-time you resume the workspace.
+You don't need to start anything by hand — all three come back automatically
+every time you resume the workspace.
 
 > **Accessing a port.** In the Brev console, open your workspace and use its
-> port/URL access to reach port `8888` (Jupyter) or `6080` (desktop). If you
-> prefer the CLI, forward a port to your laptop:
+> port/URL access to reach port `8888` (Jupyter), `8080` (VS Code), or `6080`
+> (desktop). If you prefer the CLI, forward a port to your laptop:
 > ```bash
 > brev port-forward <your-workspace-name> -p 8888:8888
-> # then open http://localhost:8888
+> # then open http://localhost:8888   (use 8080 for VS Code, 6080 for the desktop)
 > ```
 
 ---
@@ -69,7 +72,27 @@ That's it — you're ready for the whole workshop from here.
 
 ---
 
-## Section 2 — Open GUI apps (KLayout, Qiskit Metal GUI) in your browser
+## Section 2 — VS Code in your browser (code‑server)
+
+If you prefer VS Code, your workspace runs a full **VS Code in the browser** with
+the workshop environment already wired up — **no SSH, no "attach to container",
+nothing to install.**
+
+1. Open port **`8080`** for your workspace (see "Accessing a port" above) — e.g.
+   `http://localhost:8080` if you port‑forwarded. VS Code loads right away.
+2. The folder `/home/ubuntu/qdw-workshop-materials` is already open, the **Python
+   and Jupyter extensions are pre‑installed**, and the interpreter/kernel is
+   already set to the workshop venv (`…/.venv/bin/python`).
+3. Open any notebook under `workshops/…/notebooks/` and run cells, or open a
+   `.py` file and use the integrated terminal + debugger. Breakpoints work.
+
+> This is the recommended way to use VS Code here. (Connecting your *local*
+> desktop VS Code / Cursor over SSH is possible but fiddly on hosted instances —
+> the in‑browser VS Code above avoids all of that and gives the same experience.)
+
+---
+
+## Section 3 — Open GUI apps (KLayout, Qiskit Metal GUI) in your browser
 
 For the design project you may want real desktop tools — **KLayout** to inspect
 a GDS layout, the **Qiskit Metal GUI**, or **ParaView** for field plots. They run
@@ -108,20 +131,14 @@ over SSH instead of using the web desktop. This requires a local X server
 
 ---
 
-## (Advanced) Using VS Code or Cursor
+## Tuning Palace CPU usage (optional)
 
-**We recommend JupyterLab (Section 1) for the workshop** — it's a full editor
-*and* notebook environment (file browser, code editor, integrated terminal, and
-a visual debugger), with zero setup.
-
-If you specifically want VS Code / Cursor, note that the workshop environment
-lives **inside a container**, so your editor has to *attach to that container* —
-not just open the workspace host (where there is no environment). `brev open`
-connects you to the **host**, then you must run *"Attach to Running Container"*
-and pick the container ending in **`-dev-1`**. This works but is fiddly on some
-setups (Cursor needs its own container extension; you may need one clean
-reconnect for Docker access). If you hit friction, just use JupyterLab — you lose
-nothing.
+The simulations use as many CPU cores as your instance physically has, chosen
+automatically so Palace never fails with *"not enough slots available"*. To use
+**fewer** cores (e.g. to leave headroom), set the **`QDW_PALACE_CPUS`**
+environment variable to a number **≤ your instance's physical cores** before
+starting the services — for example `QDW_PALACE_CPUS=4`. You normally don't need
+to touch this.
 
 ---
 
@@ -131,12 +148,49 @@ To preserve your allotted compute, **pause (stop) your workspace whenever you're
 not actively using it** — during lectures, breaks, and overnight.
 
 - **Pause:** stop the workspace from the Brev console (or `brev stop <name>`).
-- **Resume:** start it again (or `brev start <name>`). JupyterLab and the desktop
-  **restart automatically** — just reopen the port `8888` / `6080` URLs. Resume
-  is fast because the image is already cached on your workspace disk; nothing is
-  rebuilt or re‑downloaded.
+- **Resume:** start it again (or `brev start <name>`). JupyterLab, VS Code, and
+  the desktop **restart automatically** — just reopen the port `8888` / `8080` /
+  `6080` URLs. Resume is fast because the image is already cached on your
+  workspace disk; nothing is rebuilt or re‑downloaded.
 
 You do **not** need to re‑run any setup commands on resume.
+
+---
+
+## Run everything locally with Docker (advanced, optional)
+
+<details>
+<summary>Prefer to run on your own machine instead of the cloud workspace? Click to expand.</summary>
+
+Everything here is just a public repo + a prebuilt Docker image, so you can run
+the whole stack locally with Docker Desktop (macOS/Windows/Linux). You get the
+same JupyterLab, VS Code, and desktop on `localhost`.
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/quantum-device-consortium/qdw26-workshop-materials.git
+cd qdw26-workshop-materials
+
+# 2. Pull the prebuilt image and start the services
+docker compose -f compose.deploy.yaml pull
+docker compose -f compose.deploy.yaml up -d
+```
+
+Then open in your browser:
+
+- **JupyterLab** → <http://localhost:8888>
+- **VS Code** → <http://localhost:8080>
+- **Web desktop (KLayout / GUIs)** → <http://localhost:6080/vnc.html>
+
+Notes:
+
+- The image is `linux/amd64`. On Apple Silicon it runs under emulation (slower);
+  everything still works.
+- Stop everything with `docker compose -f compose.deploy.yaml down`.
+- To rebuild from source instead of pulling, use `docker compose up --build`
+  (the dev `compose.yaml`), which also bind‑mounts your local checkout.
+
+</details>
 
 ---
 
@@ -158,7 +212,8 @@ You do **not** need to re‑run any setup commands on resume.
 | A simulation is slow | Expected — Palace is CPU/MPI. Don't add a GPU; it isn't used. |
 | Web desktop is black / empty | Right‑click the background for the app menu. If the bottom bar shows a workspace other than "Workshop", click the ◄ arrow to get back to it. Then refresh `/vnc.html` → **Connect**. |
 | KLayout / a GUI app won't open | Open it from the desktop terminal (`klayout`) and read any error there; make sure you're using the **6080** desktop, not a notebook. |
-| VS Code/Cursor shows only `/usr/bin/python3` | Your editor is on the host, not the container — see the "Advanced: VS Code/Cursor" note, or just use JupyterLab. |
+| Palace: "not enough slots available" | Already handled (cores are auto-detected). If you raised `QDW_PALACE_CPUS`, lower it to ≤ your instance's physical cores. |
+| Want VS Code but local Cursor/SSH is acting up | Use the in-browser VS Code on port **8080** (Section 2) — it avoids all SSH/attach issues. |
 | Lost the port URL | Reopen it from the Brev console, or re‑run `brev port-forward`. |
 
 Stuck? Reach the organizers at **quantum.ucla@gmail.com**.

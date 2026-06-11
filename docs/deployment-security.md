@@ -48,8 +48,8 @@ Keep the image private if it contains private workshop materials or licensing co
 
 Use `compose.deploy.yaml` for Brev deployments. It pulls the already-published image instead of rebuilding on the instance.
 
-The deployment compose file publishes JupyterLab (`8888`) and the noVNC web
-desktop (`6080`). Brev's launchable validator does not support compose
+The deployment compose file publishes JupyterLab (`8888`), code-server / browser
+VS Code (`8080`), and the noVNC web desktop (`6080`). Brev's launchable validator does not support compose
 `${VAR:-default}` interpolation, so these are literal port mappings; the Brev
 access proxy (with Brev authentication) is the access-control layer in front of
 them. JupyterLab is tokenless by default; set a non-empty `QDW_JUPYTER_TOKEN`

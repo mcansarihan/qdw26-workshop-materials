@@ -20,8 +20,9 @@ services:
       - .:/home/ubuntu/qdw-workshop-materials
     ports:
       # Same ports as the attendee deploy so maintainers can test the real
-      # experience locally: JupyterLab + the noVNC web desktop.
+      # experience locally: JupyterLab + code-server + the noVNC web desktop.
       - "${QDW_BIND:-127.0.0.1}:8888:8888"
+      - "${QDW_BIND:-127.0.0.1}:8080:8080"
       - "${QDW_BIND:-127.0.0.1}:6080:6080"
     environment:
       QISKIT_METAL_HEADLESS: "1"

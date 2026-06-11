@@ -27,11 +27,13 @@ The participant launchable should use the prebuilt image path:
 - Mode: Docker Compose
 - Compose file: `compose.deploy.yaml`
 - Image: `ghcr.io/quantum-device-consortium/qdw-workshop-materials:main`
-- Exposed ports: `8888` (JupyterLab) and `6080` (noVNC web desktop, `/vnc.html`)
+- Exposed ports: `8888` (JupyterLab), `8080` (code-server / VS Code in the
+  browser), and `6080` (noVNC web desktop, `/vnc.html`)
 
-The launchable must expose ports `8888` and `6080`. Both services auto-start
-inside the container (`compose.deploy.yaml` runs `scripts/start-services.sh`
-under supervisor) — there is no manual Jupyter start to configure.
+The launchable must expose ports `8888`, `8080`, and `6080`. All three services
+auto-start inside the container (`compose.deploy.yaml` runs
+`scripts/start-services.sh` under supervisor) — there is no manual start to
+configure.
 
 Do not rebuild the image during participant startup. Use the GHCR image built
 from `main`, then start the environment with Compose.
@@ -47,10 +49,11 @@ starts the service with `docker compose up -d --no-build`, and runs the smoke
 check unless `QDW_RUN_SMOKE=0` is set.
 
 `compose.deploy.yaml` starts the workshop container service, which auto-starts
-both JupyterLab (port `8888`, tokenless by default) and the noVNC web desktop
-(port `6080`, `/vnc.html`). The launchable only needs to expose ports `8888` and
-`6080`; no one-click JupyterLab command or manual start is required. Terminal,
-SSH, and editor access remain available to the workspace user. Published ports
+JupyterLab (port `8888`, tokenless by default), code-server / browser VS Code
+(port `8080`), and the noVNC web desktop (port `6080`, `/vnc.html`). The
+launchable only needs to expose ports `8888`, `8080`, and `6080`; no one-click
+JupyterLab command or manual start is required. Terminal, SSH, and editor access
+remain available to the workspace user. Published ports
 bind to `${QDW_BIND:-127.0.0.1}` and are reached through Brev's authenticated
 proxy.
 
@@ -106,7 +109,7 @@ Before distributing participant instructions:
 5. Create a fresh Brev test workspace from the launchable.
 6. Run the smoke checks below.
 7. Run the workshop execution check inside the published image.
-8. Verify JupyterLab (port `8888`) and the noVNC web desktop (port `6080`)
+8. Verify JupyterLab (port `8888`), code-server (port `8080`), and the noVNC web desktop (port `6080`)
    auto-start and are reachable, and that a pause→resume cycle brings both
    services back automatically.
 9. Verify stop/start behavior for the selected Brev provider and workspace configuration.

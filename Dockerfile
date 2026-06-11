@@ -17,6 +17,8 @@ RUN set -eux; \
 # during the design project without any local X server. Managed by supervisor.
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 	git \
+	curl \
+	ca-certificates \
     gmsh \
 	klayout \
 	paraview \
@@ -67,6 +69,12 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
 
+# code-server: VS Code in the browser, running INSIDE the container. This is the
+# robust "use your own IDE" path on hosted launchables — attendees open a browser
+# tab and get full VS Code with the workshop environment already selected, with
+# no SSH, no "attach to container", and no docker-group issues.
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+
 
 # Copy uv from astral-sh/uv:0.11.2
 COPY --from=ghcr.io/astral-sh/uv:0.11.2 /uv /uvx /bin/
@@ -97,8 +105,27 @@ RUN chown -R ubuntu:ubuntu /home/ubuntu/qdw-workshop-materials \
  && chmod -R a+rX /opt/qdw/uv-python \
  && runuser -u ubuntu -- /home/ubuntu/qdw-workshop-materials/.venv/bin/python -c "import matplotlib.font_manager as fm; fm._load_fontmanager(try_read_cache=False)"
 
+# Pre-configure code-server for the ubuntu user: install the Python + Jupyter
+# extensions (from Open VSX) and point the interpreter at the workshop venv so
+# the browser IDE is ready with zero setup. Extension installs are best-effort so
+# a transient Open VSX hiccup never fails the image build.
+RUN install -d -o ubuntu -g ubuntu /home/ubuntu/.local/share/code-server/User \
+ && install -o ubuntu -g ubuntu \
+      /home/ubuntu/qdw-workshop-materials/scripts/desktop/code-server-settings.json \
+      /home/ubuntu/.local/share/code-server/User/settings.json \
+ && (runuser -u ubuntu -- code-server --install-extension ms-python.python || echo "WARN: ms-python.python not installed") \
+ && (runuser -u ubuntu -- code-server --install-extension ms-toolsai.jupyter || echo "WARN: ms-toolsai.jupyter not installed")
+
 ENV PATH="/home/ubuntu/qdw-workshop-materials/.venv/bin:$PATH"
 ENV PYTHONPATH="/home/ubuntu/qdw-workshop-materials/shared/python"
+
+# MPI oversubscription backstop. palace_cpu_count() already defaults to the
+# physical-core count so Palace fits the available MPI slots; this env var means
+# that even if someone sets QDW_PALACE_CPUS higher than the core count, MPI
+# time-shares instead of hard-failing with "not enough slots available".
+# (Verified on the OpenMPI 5 / PRRTE build used here; the OpenMPI 4 variable is
+# a no-op on this version.)
+ENV PRTE_MCA_rmaps_default_mapping_policy=:oversubscribe
 
 # Make the IDE experience plug-and-play. When a participant runs VS Code / Cursor
 # "Dev Containers: Attach to Running Container", this label is read automatically:

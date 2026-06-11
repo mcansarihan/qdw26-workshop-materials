@@ -197,10 +197,37 @@ Notes:
 ## Saving your work
 
 - Files you edit inside the materials directory **persist across pause/resume**.
-- For a permanent copy you keep after the workshop, either **download** notebooks
-  from JupyterLab (right‑click → Download) or push to your **own** git repo.
-- Don't rely on the workspace as long‑term storage — back up anything important
-  before the workshop ends.
+- Don't rely on the workspace as long‑term storage — **download** anything
+  important (see below) or push it to your **own** git repo before the workshop
+  ends.
+
+### Download files from your workspace to your computer
+
+**From the browser (easiest, per file):**
+
+- In **JupyterLab** (8888) or **VS Code** (8080): right‑click a file in the file
+  browser → **Download**. Works for notebooks, GDS files, plots, logs, etc.
+- To grab **many files at once**, open a terminal (in Jupyter, VS Code, or the
+  desktop) and zip them first, then download the single zip:
+  ```bash
+  cd /home/ubuntu/qdw-workshop-materials
+  zip -r my_work.zip workshops/quantum-device-design/notebooks/sims my_chip.gds
+  ```
+  then right‑click `my_work.zip` → **Download**.
+
+**From your laptop's terminal (whole folders), using the Brev CLI:**
+
+```bash
+# one file
+brev copy <your-workspace-name>:/home/ubuntu/qdw-workshop-materials/my_chip.gds ./
+
+# a whole folder (note the trailing slashes)
+brev copy <your-workspace-name>:/home/ubuntu/qdw-workshop-materials/workshops/ ./qdw-download/
+```
+
+`brev copy` reads from **inside the container by default** — i.e. exactly where
+your notebook work lives — so you don't need to worry about host-vs-container
+paths. (Reverse the arguments to upload files *to* your workspace.)
 
 ---
 

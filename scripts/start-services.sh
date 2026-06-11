@@ -15,7 +15,9 @@ rm -f /tmp/.X11-unix/X1 2>/dev/null || true
 
 mkdir -p /home/ubuntu/.vnc /home/ubuntu/.fluxbox
 
-# Install the right-click desktop menu (Terminal / KLayout / ParaView).
+# Install the right-click desktop menu (Terminal / KLayout / ParaView) and the
+# fluxbox config (single workspace, so attendees never land on a blank desktop).
 cp -f /home/ubuntu/qdw-workshop-materials/scripts/desktop/fluxbox-menu /home/ubuntu/.fluxbox/menu
+cp -f /home/ubuntu/qdw-workshop-materials/scripts/desktop/fluxbox-init /home/ubuntu/.fluxbox/init
 
 exec supervisord -c /home/ubuntu/qdw-workshop-materials/scripts/supervisord.conf -n

@@ -28,6 +28,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
 	novnc \
 	websockify \
 	xterm \
+	x11-xserver-utils \
 	dbus-x11 \
 	libdbus-1-3 \
 	libdrm2 \

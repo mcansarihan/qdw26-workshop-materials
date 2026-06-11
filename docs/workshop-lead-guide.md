@@ -1,6 +1,29 @@
 # Workshop Lead Guide
 
-Workshop leads should be able to add materials without learning the whole environment stack.
+This guide describes how workshop leads add materials to the shared repository
+without needing to manage the full deployment stack.
+
+## Contribution Flow
+
+Workshop materials move through this path:
+
+```text
+pull request -> CI checks -> merge to main -> published image -> Brev launchable
+```
+
+Workshop leads contribute through pull requests. Maintainers review the
+materials, update the shared environment when needed, and validate a fresh
+workspace from the launchable before participant use.
+
+Planned workshop tracks include:
+
+- Design layout.
+- EM simulations.
+- Hamiltonian and circuit analysis.
+- EM and circuit analysis.
+
+Each track should be represented by a self-contained workshop folder or a
+clearly documented section within an existing folder.
 
 ## Add A Workshop
 
@@ -19,7 +42,9 @@ Use a short lowercase slug, for example `quantum-device-design`.
 
 ## Fill Out The Manifest
 
-`workshop.yaml` is the handoff point between workshop leads and environment maintainers. It tells CI what to validate and tells maintainers which dependencies need to become part of the shared image.
+`workshop.yaml` is the handoff point between workshop content and environment
+maintenance. It tells CI what to validate and tells maintainers which
+dependencies need to become part of the shared image.
 
 Required fields:
 
@@ -33,8 +58,27 @@ Required fields:
 - `python_dependencies`
 - `system_dependencies`
 - `smoke_commands`
+- `execution_targets`
 
-Use `entrypoints` for the notebooks attendees should open first. Use `smoke_commands` for fast checks that prove the workshop can start, not for full simulations.
+Use `entrypoints` for the notebooks participants should open first. Use
+`smoke_commands` for fast checks that prove the workshop can start, not for
+full simulations.
+
+Use `execution_targets` for attendee-facing notebooks or Python scripts that
+must run successfully in the workshop Docker image. CI executes these targets
+inside the image on pull requests and records timing/resource results.
+
+Example:
+
+```yaml
+execution_targets:
+  - path: notebooks/tutorial.ipynb
+    kind: notebook
+    timeout_seconds: 900
+  - path: scripts/demo.py
+    kind: python
+    timeout_seconds: 120
+```
 
 ## Keep Materials Portable
 
@@ -47,4 +91,28 @@ Use `entrypoints` for the notebooks attendees should open first. Use `smoke_comm
 
 ## Dependency Requests
 
-Add dependency names to `workshop.yaml` first. Maintainers will update the shared root environment and lock files after checking compatibility with other workshops.
+Add dependency names to `workshop.yaml` first. Maintainers will update the
+shared root environment and lock files after checking compatibility with other
+workshops.
+
+If a notebook can run in a lighter environment such as Google Colab, note that
+in the workshop README. If it requires Palace, GUI forwarding, or another
+Brev-specific capability, state that clearly so maintainers can test the right
+deployment path.
+
+## Pull Request Checklist
+
+Before requesting review:
+
+- Confirm every notebook and asset referenced by `workshop.yaml` exists.
+- Keep notebooks runnable from the repository root or the workshop folder using
+  relative paths.
+- Add fast `smoke_commands` that prove the workshop can start without running
+  long simulations.
+- Add every attendee-facing notebook or Python script to `execution_targets`.
+- Declare requested Python and system dependencies in `workshop.yaml`.
+- Run the local checks listed in `CONTRIBUTING.md` when practical.
+
+Maintainers decide when dependency requests become part of the shared
+environment because every added package affects all workshops and the published
+image.

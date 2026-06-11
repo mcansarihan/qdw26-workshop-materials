@@ -1,19 +1,21 @@
 # Deployment Security
 
-This repository is intended for a workshop environment where attendees use a shared, prebuilt runtime without handling maintainer credentials.
+This repository supports workshop environments where participants use a shared,
+prebuilt runtime without handling maintainer credentials.
 
 ## Trust Boundaries
 
 - GitHub stores source materials, CI configuration, and the Docker build definition.
 - GitHub Actions builds and publishes the canonical image to GHCR.
-- Brev runs the published image and exposes approved access paths to attendees.
-- Attendees should never receive repository deploy keys, package tokens, maintainer credentials, or cloud-provider credentials.
+- Brev runs the published image and exposes approved access paths to participants.
+- Participants should never receive repository deploy keys, package tokens,
+  maintainer credentials, or cloud-provider credentials.
 
 ## Repository Access
 
 The current deployment mode uses a public GitHub repository so Brev can clone
-the materials without repository credentials. This is the simplest attendee
-path and keeps Brev setup reproducible.
+the materials without repository credentials. This keeps hosted setup
+reproducible.
 
 If the repository is made private again, use a read-only deploy key for Brev
 to clone it. Scope the deploy key only to this repository and do not reuse it
@@ -29,7 +31,7 @@ Local-only planning notes and local credential files are ignored by both Git and
 
 ## GHCR Access
 
-The intended attendee deployment uses a public GHCR image so Brev and attendee
+The intended hosted deployment uses a public GHCR image so Brev and participant
 machines can pull it without package credentials.
 
 Public image visibility means the image layers are public. Do not bake private
@@ -46,21 +48,35 @@ Keep the image private if it contains private workshop materials or licensing co
 
 Use `compose.deploy.yaml` for Brev deployments. It pulls the already-published image instead of rebuilding on the instance.
 
-The deployment compose file defaults to binding Jupyter on `127.0.0.1:8888`. Override `QDW_JUPYTER_BIND=0.0.0.0` only when the Brev access layer requires it and the instance is protected by Brev authentication or another access control layer.
+The deployment compose file defaults to binding the published ports —
+JupyterLab on `127.0.0.1:8888` and the noVNC web desktop on `127.0.0.1:6080` —
+to localhost. Override `QDW_BIND=0.0.0.0` only when the Brev access layer
+requires it and the instance is protected by Brev authentication or another
+access control layer. JupyterLab is tokenless by default (access is gated by
+the Brev proxy); set `QDW_JUPYTER_TOKEN` to require a token.
 
-The container drops Linux capabilities and uses `no-new-privileges` by default. Do not add privileged mode, Docker socket mounts, host filesystem mounts, or broad network exposure for attendee-facing deployments unless there is a documented reason and review.
+The container runs as a non-root user with `no-new-privileges` enabled, so
+processes cannot gain privileges via setuid. (The previous `cap_drop: ALL` was
+removed because it broke OpenMPI/Palace and the X server the GUI desktop needs;
+`no-new-privileges` plus non-root execution is the retained hardening.) Do not
+add privileged mode, Docker socket mounts, host filesystem mounts, or broad
+network exposure for hosted deployments unless there is a documented reason and
+review.
 
-## Attendee Isolation
+## Participant Isolation
 
-A single shared container is not a strong multi-user security boundary. Attendees using the same Unix account, container, or writable workspace may be able to see or modify each other's files.
+A single shared container is not a strong multi-user security boundary.
+Participants using the same Unix account, container, or writable workspace may
+be able to see or modify each other's files.
 
-For attendee-facing use, prefer one of these patterns:
+For participant-facing use, prefer one of these patterns:
 
-- One Brev instance per attendee or small trusted group.
+- One Brev instance per participant or small trusted group.
 - A managed multi-user JupyterHub-style deployment with per-user accounts and isolated storage.
 - Read-only shared materials plus separate per-user working directories.
 
-Do not treat one shared Docker container as suitable isolation for untrusted arbitrary code from many attendees.
+Do not treat one shared Docker container as suitable isolation for untrusted
+arbitrary code from many participants.
 
 ## CI Permissions
 
@@ -85,7 +101,9 @@ docker compose -f compose.deploy.yaml config
 uv run --with pip-audit pip-audit --progress-spinner off
 ```
 
-Keep Dependabot alerts at zero before attendee deployment. Treat stale alerts as unresolved until local audit, GitHub SBOM, and Dependabot alert state agree.
+Keep Dependabot alerts at zero before participant deployment. Treat stale
+alerts as unresolved until local audit, GitHub SBOM, and Dependabot alert state
+agree.
 
 ## Incident Response
 

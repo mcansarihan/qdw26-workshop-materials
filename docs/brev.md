@@ -1,124 +1,155 @@
-# Brev
+# Brev Deployment
 
-Brev hosts the remote compute instance. GitHub stores the workshop materials and Docker build definition. GitHub Container Registry stores the published workshop image.
+Brev is the hosted compute option for workshop sessions that need the full
+preinstalled environment.
 
-The current deployment target is a public GitHub repository plus a public
-GHCR image. That lets Brev clone the materials and pull the image without
-repository deploy keys or package tokens.
+## How It Works
 
-The preferred deployment path is:
-
-1. Merge workshop updates into `main`.
-2. Let GitHub Actions validate and publish `ghcr.io/quantum-device-consortium/qdw-workshop-materials:main`.
-3. Start a Brev instance only after checks are green.
-4. Clone this repository onto the Brev instance.
-5. Run `scripts/brev-setup.sh`, which pulls the published image through `compose.deploy.yaml`.
-
-This keeps Brev deployment close to what CI already tested.
-
-## Cost Check
-
-Before provisioning, check available instance types and pricing:
-
-```bash
-brev search cpu --json
-brev search gpu --json
+```text
+GitHub repository -> GitHub Actions -> GHCR image -> Brev launchable -> participant workspace
 ```
 
-Use a low-cost or credited instance for setup testing. Larger instances can be selected later for attendee load.
+- The repository stores workshop materials, environment files, and validation scripts.
+- GitHub Actions validates changes and publishes the workshop image.
+- The Brev launchable starts from the published GHCR image and Docker Compose setup.
+- Participants receive NVIDIA credit codes and launchable access instructions through workshop channels.
+- Participants create and manage their own Brev workspace from the launchable.
 
-Do not start or create instances until there is a clear test window and shutdown plan.
+For participant-facing steps (launch workspace, connect IDE, browser Jupyter,
+GUI desktop, pause/resume, save work), point participants to
+[participant-quickstart.md](participant-quickstart.md).
 
-## Secure Access
+## Launchable Requirements
 
-For the current public-repo/public-image mode, Brev should not need GitHub
-credentials to clone the repository or pull the image.
+The participant launchable should use the prebuilt image path:
 
-Before making a launchable attendee-facing, verify both assumptions from a
-machine that is not logged in to GHCR:
+- Repository: `https://github.com/quantum-device-consortium/qdw26-workshop-materials`
+- Mode: Docker Compose
+- Compose file: `compose.deploy.yaml`
+- Image: `ghcr.io/quantum-device-consortium/qdw-workshop-materials:main`
+- Exposed ports: `8888` (JupyterLab) and `6080` (noVNC web desktop, `/vnc.html`)
+
+The launchable must expose ports `8888` and `6080`. Both services auto-start
+inside the container (`compose.deploy.yaml` runs `scripts/start-services.sh`
+under supervisor) — there is no manual Jupyter start to configure.
+
+Do not rebuild the image during participant startup. Use the GHCR image built
+from `main`, then start the environment with Compose.
+
+If the launchable must use a setup script, use:
 
 ```bash
-git ls-remote https://github.com/quantum-device-consortium/qdw26-workshop-materials.git HEAD
-
-tmpdir="$(mktemp -d)"
-DOCKER_CONFIG="$tmpdir" docker manifest inspect ghcr.io/quantum-device-consortium/qdw-workshop-materials:main
-rm -rf "$tmpdir"
+bash scripts/brev-setup.sh
 ```
 
-If the repository is made private again later, use a read-only deploy key
-scoped only to this repository. A fine-grained GitHub token can also work for
-repository cloning, but it should be limited to repository read access.
+The setup script defaults to `compose.deploy.yaml`, runs `docker compose pull`,
+starts the service with `docker compose up -d --no-build`, and runs the smoke
+check unless `QDW_RUN_SMOKE=0` is set.
 
-If the GHCR image is private, Brev needs package read access for the pull.
-Prefer a short-lived token or Brev secret mechanism if available.
+`compose.deploy.yaml` starts the workshop container service, which auto-starts
+both JupyterLab (port `8888`, tokenless by default) and the noVNC web desktop
+(port `6080`, `/vnc.html`). The launchable only needs to expose ports `8888` and
+`6080`; no one-click JupyterLab command or manual start is required. Terminal,
+SSH, and editor access remain available to the workspace user. Published ports
+bind to `${QDW_BIND:-127.0.0.1}` and are reached through Brev's authenticated
+proxy.
 
-Do not put long-lived credentials in notebooks, committed files, shell history, or attendee-facing docs.
+Existing workspaces do not automatically receive repository or image updates.
+Final workshop testing should use a fresh workspace created from the launchable.
 
-`scripts/brev-clone-and-setup.sh` loads GitHub SSH host keys from GitHub's HTTPS metadata endpoint before cloning. This avoids blindly trusting an unverified first SSH connection. The script fails closed if `curl` or `python3` are unavailable.
+## Participant Operating Rules
 
-See [deployment-security.md](deployment-security.md) before sharing any attendee-facing environment.
+Participants should:
 
-For GHCR, `scripts/brev-setup.sh` supports these environment variables:
+1. Create one workspace from the workshop launchable.
+2. Start or resume the workspace for scheduled workshop sessions.
+3. Save notebooks and important outputs before leaving a session.
+4. Stop the workspace when not actively using it.
+5. Delete the workspace only after the workshop is complete and any needed files have been saved elsewhere.
+
+Stopping is the expected cost-control action between sessions. Deleting is a
+cleanup action and should not be used for routine breaks.
+
+See [workspace-persistence.md](workspace-persistence.md) for attendee-facing
+stop/start and state-preservation guidance.
+
+## Fast Start Commands
+
+Run inside the workspace repository checkout:
 
 ```bash
-GHCR_USERNAME=<github-username>
-GHCR_TOKEN=<classic-token-with-read-packages>
-```
-
-If those are not set, the script assumes Docker is already authenticated or the image is public.
-
-When GHCR credentials are supplied, the setup script uses a temporary Docker config directory and removes it before exiting so package tokens are not left in the default Docker config.
-
-## Deployment Modes
-
-Local development uses `compose.yaml` and may build from source:
-
-```bash
-docker compose up -d --build
-```
-
-Brev deployment uses `compose.deploy.yaml` and pulls the published image:
-
-```bash
+cd ~/qdw26-workshop-materials
 docker compose -f compose.deploy.yaml pull
-docker compose -f compose.deploy.yaml up -d
+docker compose -f compose.deploy.yaml up -d --no-build
 docker compose -f compose.deploy.yaml exec -T dev python scripts/smoke_environment.py
 ```
 
-Use the deployment compose file for attendee-facing environments. Use the local compose file when changing dependencies or debugging Docker builds.
-
-By default, the deployment compose file binds Jupyter to `127.0.0.1:8888`. Set `QDW_JUPYTER_BIND=0.0.0.0` only if Brev's access layer requires a public interface and the instance is protected by authentication.
-
-## Start A Test Workspace
-
-Only run this after confirming the cost and instance type. A small CPU instance is enough for first validation:
+For a normal same-day resume where the environment was already pulled and no
+organizer has announced an image update:
 
 ```bash
-brev create qdw-workshop-materials \
-  --type cpu-d3.4vcpu-16gb \
-  --startup-script @scripts/brev-clone-and-setup.sh
+cd ~/qdw26-workshop-materials
+QDW_PULL_IMAGE=0 bash scripts/brev-setup.sh
 ```
 
-Open the instance using the path that fits the workshop:
+Use `QDW_RUN_SMOKE=0` only when an organizer asks participants to skip the smoke
+check.
+
+## Release Checklist
+
+Before distributing participant instructions:
+
+1. Merge workshop updates through pull requests.
+2. Confirm GitHub Actions passes on `main`.
+3. Confirm the GHCR image publish workflow succeeds.
+4. Confirm the launchable uses `compose.deploy.yaml` and the GHCR image.
+5. Create a fresh Brev test workspace from the launchable.
+6. Run the smoke checks below.
+7. Run the workshop execution check inside the published image.
+8. Verify JupyterLab (port `8888`) and the noVNC web desktop (port `6080`)
+   auto-start and are reachable, and that a pause→resume cycle brings both
+   services back automatically.
+9. Verify stop/start behavior for the selected Brev provider and workspace configuration.
+10. Confirm credit-code distribution, support plan, and participant stop reminders.
+
+## Smoke Checks
+
+Run these inside a fresh Brev workspace:
 
 ```bash
-brev open qdw-workshop-materials
-brev open qdw-workshop-materials code
-brev open qdw-workshop-materials cursor
-```
-
-SSH is also supported through the Brev CLI.
-
-## After Login
-
-```bash
-cd qdw-workshop-materials
+cd ~/qdw26-workshop-materials
 docker compose -f compose.deploy.yaml ps
-docker compose -f compose.deploy.yaml exec dev bash
+docker compose -f compose.deploy.yaml exec -T dev python scripts/smoke_environment.py
+docker compose -f compose.deploy.yaml exec -T dev python scripts/validate_workshops.py
+docker compose -f compose.deploy.yaml exec -T dev python scripts/check_notebooks.py
 ```
 
-JupyterLab, editor attachment, SSH, and terminal access all use the same running environment.
+For release validation, also run the manifest-declared attendee notebooks and
+Python scripts:
 
-## Shutdown
+```bash
+docker compose -f compose.deploy.yaml exec -T dev python scripts/run_workshop_execution.py
+```
 
-After a test, stop or delete the instance so credits are not consumed by idle compute. Delete only when the instance does not contain work that needs to be preserved.
+Run the checks again whenever workshop notebooks or environment dependencies
+change.
+
+## Brev Command Notes
+
+Brev CLI help documents these participant-relevant commands:
+
+- `brev stop` stops a running machine.
+- `brev start` starts a paused or off machine, or creates one from a URL.
+- `brev delete` is a separate command for deleting an instance.
+- Brev CLI help notes that start/stop support is provider-dependent.
+
+Official persistence guarantees for the final NVIDIA/Brev event configuration
+should be verified before publishing participant instructions. Until then,
+state preservation guidance should be written conservatively.
+
+## Data And Credentials
+
+Do not commit participant lists, credit codes, billing records, sponsor data,
+credentials, license files, or private installers.
+
+See [deployment-security.md](deployment-security.md) for security requirements.

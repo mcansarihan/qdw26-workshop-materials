@@ -1,11 +1,11 @@
-# Simulating **Qiskit Metal** Designs with **Palace** and **pyPalace**
+# Simulating **Quantum Metal** Designs with **Palace** and **pyPalace**
 
 ## Start Here
 
 **Prerequisite:** complete the transmon–resonator layout in the
 [`quantum-device-design`](../quantum-device-design/) workshop —
 [`notebooks/03_transmon_and_resonator.ipynb`](../quantum-device-design/notebooks/03_transmon_and_resonator.ipynb).
-This workshop reuses that chip geometry and walks through FEM simulation with pyPalace.
+This workshop reuses that device geometry and walks through FEM simulation with pyPalace.
 
 Recommended notebooks (in order):
 
@@ -34,7 +34,7 @@ Unlike higher-level frameworks, `pyPalace` is intentionally low-level, exposing 
 * How to define boundary conditions, which ones are commonly used in superconducting quantum device modeling, and why.
 * How simulation parameters influence both accuracy and computational cost.
 
-For researchers, the low-level nature of pyPalace provides direct access to all of Palace's capabilities, giving users complete control over simulation setup, solver configuration, and post-processing workflows. While pyPalace includes direct integration with Qiskit Metal, it is not tied to any specific CAD or meshing workflow. Any geometry and mesh compatible with Palace can be imported, allowing users to leverage their preferred design and mesh generation tools. For consistency with the Quantum Device Workshop, however, we use the Qiskit Metal → pyPalace workflow throughout this tutorial.
+For researchers, the low-level nature of pyPalace provides direct access to all of Palace's capabilities, giving users complete control over simulation setup, solver configuration, and post-processing workflows. While pyPalace includes direct integration with Quantum Metal, it is not tied to any specific CAD or meshing workflow. Any geometry and mesh compatible with Palace can be imported, allowing users to leverage their preferred design and mesh generation tools. For consistency with the Quantum Device Workshop, however, we use the Quantum Metal → pyPalace workflow throughout this tutorial.
 
 **About pyPalace**
 
@@ -49,6 +49,6 @@ For superconducting devices, pyPalace includes quantum analysis tools based on m
 
 **Requirements**
 
-The shared repository environment installs Qiskit Metal, SQDMetal, Palace, and (once consolidated by maintainers) pyPalace. If you need additional packages for this workshop, add them to `workshop.yaml` first so maintainers can wire them into the shared environment.
+The shared repository environment installs Quantum Metal, SQDMetal, Palace, and (once consolidated by maintainers) pyPalace. If you need additional packages for this workshop, add them to `workshop.yaml` first so maintainers can wire them into the shared environment.
 
 Let us begin the exploration.

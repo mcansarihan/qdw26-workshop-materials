@@ -7,15 +7,16 @@ workspace.
 
 You can work however you prefer:
 
-- **Section 1 — Your own IDE** (VS Code / Cursor): edit and run notebooks with
+- **Section 1 — Browser (JupyterLab)** ⭐ *recommended*: nothing to install, no
+  setup — open one tab and the environment (kernel, all packages) is already
+  selected for you.
+- **Section 2 — Your own IDE** (VS Code / Cursor): edit and run notebooks with
   your familiar editor, autocomplete, and debugger.
-- **Section 2 — Browser (JupyterLab)**: nothing to install locally; just open a
-  tab.
 - **Section 3 — GUI apps in the browser** (KLayout, the Qiskit Metal GUI): for
   the design project, when you want to open real desktop tools.
 
-Pick one to start — you can switch anytime; they all share the same files and
-environment.
+**If you just want to start fast, use Section 1.** All three share the same files
+and environment, and you can switch anytime.
 
 ---
 
@@ -42,49 +43,61 @@ time you resume the workspace.
 
 > **Accessing a port.** In the Brev console, open your workspace and use its
 > port/URL access to reach port `8888` (Jupyter) or `6080` (desktop). If you
-> prefer the CLI, you can forward a port to your laptop:
+> prefer the CLI, forward a port to your laptop:
 > ```bash
-> brev port-forward <your-workspace-name> --port 8888:8888
+> brev port-forward <your-workspace-name> -p 8888:8888
 > # then open http://localhost:8888
 > ```
 
 ---
 
-## Section 1 — Connect your IDE (VS Code or Cursor)
+## Section 1 — Run notebooks in your browser (JupyterLab) ⭐
 
-This is the best path if you want autocomplete, an integrated terminal, and a
-debugger while writing code for the design project.
-
-1. **Open the workspace in your editor.** From the Brev console choose
-   **Open in VS Code** (or use Remote‑SSH to the workspace). Cursor uses the same
-   Remote‑SSH flow.
-2. **Attach to the running container.** The environment lives in a Docker
-   container called `dev`. Install the **Dev Containers** extension, then run
-   *"Dev Containers: Attach to Running Container…"* and pick the `dev` container.
-   *(Alternatively, from a workspace terminal: `docker compose -f compose.deploy.yaml exec dev bash`.)*
-3. **Open the materials folder:** `/home/ubuntu/qdw-workshop-materials`.
-4. **Open a notebook** under `workshops/…/notebooks/` and, when prompted for a
-   kernel, choose the **Python 3** interpreter at
-   `/home/ubuntu/qdw-workshop-materials/.venv/bin/python`.
-5. Run cells normally. Breakpoints and the debugger work — `debugpy` is included.
-
-Everything you save here is the same set of files you'd see in JupyterLab.
-
----
-
-## Section 2 — Run notebooks in your browser (JupyterLab)
-
-The zero‑setup path.
+The zero‑setup path — recommended for everyone, especially to start.
 
 1. Open port **`8888`** for your workspace (see "Accessing a port" above).
-2. JupyterLab opens directly — no password or token needed (your workspace is
-   already private to you).
+2. JupyterLab opens directly — **no password, no token, no environment to pick**.
+   The workshop kernel (with every package) is already the default.
 3. In the file browser on the left, open:
    - `workshops/quantum-device-design/notebooks/` — start at `01_welcome.ipynb`
      and work upward (`02_…`, `03_…`, `04_…`, `05_project.ipynb`).
    - `workshops/electromagnetic-simulations/notebooks/` — `eigenmode_EPR.ipynb`
      and `electrostatic_LOM.ipynb`.
 4. Run cells with **Shift+Enter**. Layout previews and plots render inline.
+
+That's it — you're ready for the whole workshop from here.
+
+---
+
+## Section 2 — Use your own IDE (VS Code or Cursor)
+
+Optional — for autocomplete, an integrated terminal, and a debugger. The
+workshop environment lives **inside a Docker container** on your workspace, so
+your editor needs to *attach to that container* (not just open the host). It's
+two clicks and the environment is then pre‑configured for you.
+
+1. **Open the workspace.** From the Brev console choose **Open in VS Code / Cursor**,
+   or from the CLI:
+   ```bash
+   brev open <your-workspace-name> cursor    # or: ... code
+   ```
+   This connects your editor to the workspace **host**. (The first time, if it
+   ever says it can't reach Docker, just reconnect once — *Command Palette →
+   "Remote‑SSH: Kill VS Code Server on Host" → reopen* — and continue.)
+2. **Attach to the container.** Install the **Dev Containers** extension if
+   prompted, then *Command Palette → "Dev Containers: Attach to Running
+   Container…"* and pick the container whose name ends in **`-dev-1`** (e.g.
+   `workspace-dev-1`).
+3. A new window opens **inside** the container. Open the folder
+   `/home/ubuntu/qdw-workshop-materials`.
+4. Open any notebook under `workshops/…/notebooks/` and run it. The Python /
+   Jupyter extensions and the correct kernel
+   (`…/.venv/bin/python`) are **already selected** — nothing to choose.
+   Breakpoints and the debugger work out of the box.
+
+> If you ever see only host interpreters like `/usr/bin/python3` and an
+> "ipykernel is missing" message, it means your editor is on the **host**, not
+> attached to the container — redo step 2.
 
 ---
 
@@ -156,7 +169,7 @@ You do **not** need to re‑run any setup commands on resume.
 | Symptom | Fix |
 |---|---|
 | Jupyter / desktop tab won't load right after resume | Give it ~15–30s to restart, then refresh. |
-| "Kernel not found" in your IDE | Select `/home/ubuntu/qdw-workshop-materials/.venv/bin/python`. |
+| IDE shows only `/usr/bin/python3` / "ipykernel missing" | Your editor is on the host, not the container — do Section 2 step 2 ("Attach to Running Container"). |
 | A simulation is slow | Expected — Palace is CPU/MPI. Don't add a GPU; it isn't used. |
 | Web desktop is black | Click into it once; if still black, refresh `/vnc.html` and **Connect** again. |
 | Lost the port URL | Reopen it from the Brev console, or re‑run `brev port-forward`. |

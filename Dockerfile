@@ -99,6 +99,11 @@ RUN chown -R ubuntu:ubuntu /home/ubuntu/qdw-workshop-materials \
 ENV PATH="/home/ubuntu/qdw-workshop-materials/.venv/bin:$PATH"
 ENV PYTHONPATH="/home/ubuntu/qdw-workshop-materials/shared/python"
 
+# Make the IDE experience plug-and-play. When a participant runs VS Code / Cursor
+# "Dev Containers: Attach to Running Container", this label is read automatically:
+# it installs the Python + Jupyter extensions and pre-selects the workshop venv as
+# the interpreter/kernel — so no manual environment selection is ever needed.
+LABEL devcontainer.metadata='[{"remoteUser":"ubuntu","workspaceFolder":"/home/ubuntu/qdw-workshop-materials","customizations":{"vscode":{"extensions":["ms-python.python","ms-toolsai.jupyter"],"settings":{"python.defaultInterpreterPath":"/home/ubuntu/qdw-workshop-materials/.venv/bin/python","python.terminal.activateEnvironment":false,"jupyter.kernels.filter":[]}}}}]'
 
 USER ubuntu
 ENTRYPOINT ["/home/ubuntu/qdw-workshop-materials/scripts/container-entrypoint.sh"]

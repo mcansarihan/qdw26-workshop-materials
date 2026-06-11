@@ -1123,6 +1123,23 @@ wheels = [
 ]
 
 [[package]]
+name = "ipympl"
+version = "0.10.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "ipython" },
+    { name = "ipywidgets" },
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "pillow" },
+    { name = "traitlets" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/16/9c/f79e29f6262e821a15757662aa11cbb1db0a51ef836a32a46ddcb25e6832/ipympl-0.10.0.tar.gz", hash = "sha256:eda69602a010af2a42e8ebd069b0ee0dbe8df7fc69d7c1e8b99fece0a2fe613f", size = 3595672, upload-time = "2026-01-21T20:19:47.971Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/12/b3/88c0ef22878c86035f058df0ac6c171319ffd0aa52a406455ed3a3847566/ipympl-0.10.0-py3-none-any.whl", hash = "sha256:a09c4f0ff86490cc62aed45e53b912fb706e3ec3506c4a51ce4a670d6667f5ce", size = 519020, upload-time = "2026-01-21T20:19:46.325Z" },
+]
+
+[[package]]
 name = "ipython"
 version = "9.13.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1155,6 +1172,30 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ef/4c/5dd1d8af08107f88c7f741ead7a40854b8ac24ddf9ae850afbcf698aa552/ipython_pygments_lexers-1.1.1.tar.gz", hash = "sha256:09c0138009e56b6854f9535736f4171d855c8c08a563a0dcd8022f78355c7e81", size = 8393, upload-time = "2025-01-17T11:24:34.505Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d9/33/1f075bf72b0b747cb3288d011319aaf64083cf2efef8354174e3ed4540e2/ipython_pygments_lexers-1.1.1-py3-none-any.whl", hash = "sha256:a9462224a505ade19a605f71f8fa63c2048833ce50abc86768a0d81d876dc81c", size = 8074, upload-time = "2025-01-17T11:24:33.271Z" },
+]
+
+[[package]]
+name = "ipyvue"
+version = "1.12.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "ipywidgets" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d2/37/7b66ea86cde30f4983566cbfb8bb133eed4d2252a7f0b941057855e666e7/ipyvue-1.12.0.tar.gz", hash = "sha256:408b5e6a64e203fc679f447a071e3dbc178ab2906982f248adf722fc84773ffa", size = 1749270, upload-time = "2026-02-11T10:07:43.884Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/48/be/cb0bd788bda9624a2facd270a6b1eef1b606bdeacee3a6c1cf9e79704afc/ipyvue-1.12.0-py2.py3-none-any.whl", hash = "sha256:c7f555a71c28724ceda344af294bdc48407eace17222065cfb7b4cff80665362", size = 2673161, upload-time = "2026-02-11T10:07:41.91Z" },
+]
+
+[[package]]
+name = "ipyvuetify"
+version = "1.11.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "ipyvue" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a4/07/31c9615532b6c190a3033460e4aa83a64ac532281758ff734e1bc42e3c00/ipyvuetify-1.11.3.tar.gz", hash = "sha256:3580afa76d9add4ae04ccb7fd57d4a0cf03a261705742e7137def3ebb65ac71d", size = 6170730, upload-time = "2025-07-02T11:25:12.691Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/47/4d/fd1a6a888f8abb6b8dc316cc78b5153e75eff7ae66a94cf30b144fadd09d/ipyvuetify-1.11.3-py2.py3-none-any.whl", hash = "sha256:fa83aaf9f4ce669172d532094d60bd7c40d3cb9c5d6bb2f4a14565da2b09a8d8", size = 6290266, upload-time = "2025-07-02T11:25:10.553Z" },
 ]
 
 [[package]]
@@ -2859,6 +2900,8 @@ dependencies = [
     { name = "django", version = "5.2.14", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "django", version = "6.0.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "idna" },
+    { name = "ipympl" },
+    { name = "ipyvuetify" },
     { name = "jupyter" },
     { name = "jupyter-server" },
     { name = "jupyterlab" },
@@ -2885,6 +2928,8 @@ dependencies = [
 requires-dist = [
     { name = "django", specifier = ">=5.2.14" },
     { name = "idna", specifier = ">=3.15" },
+    { name = "ipympl", specifier = ">=0.9.7" },
+    { name = "ipyvuetify", specifier = ">=1.11.3" },
     { name = "jupyter", specifier = ">=1.1.1" },
     { name = "jupyter-server", specifier = ">=2.18.0" },
     { name = "jupyterlab", specifier = ">=4.5.7" },

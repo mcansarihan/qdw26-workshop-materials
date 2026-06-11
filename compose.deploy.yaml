@@ -1,17 +1,21 @@
 services:
   dev:
-    image: ${QDW_IMAGE:-ghcr.io/quantum-device-consortium/qdw-workshop-materials:main}
-    platform: ${QDW_DOCKER_PLATFORM:-linux/amd64}
+    # NOTE: this file is consumed directly by Brev's launchable validator, which
+    # does NOT support docker-compose variable interpolation (it rejects the
+    # dollar-brace default syntax in the ports IP field). Keep every value here
+    # LITERAL. For local overrides use compose.yaml instead.
+    image: ghcr.io/quantum-device-consortium/qdw-workshop-materials:main
+    platform: linux/amd64
     working_dir: /home/ubuntu/qdw-workshop-materials
     init: true
     # Bring the workspace back automatically after a Brev pause/resume or a host
     # reboot, so attendees never have to re-run a command.
     restart: unless-stopped
     ports:
-      # JupyterLab. Bind to localhost by default; the Brev proxy exposes it.
-      - "${QDW_BIND:-127.0.0.1}:8888:8888"
+      # JupyterLab (Brev proxies this port to the attendee).
+      - "8888:8888"
       # noVNC web desktop (KLayout / Qiskit Metal GUI in the browser).
-      - "${QDW_BIND:-127.0.0.1}:6080:6080"
+      - "6080:6080"
     environment:
       # Headless defaults for notebook kernels. The kernel itself also clears
       # DISPLAY and forces offscreen Qt (see scripts/start-jupyter.sh); these are
@@ -21,11 +25,11 @@ services:
       QT_QPA_PLATFORM: offscreen
       MPLBACKEND: Agg
       # Tokenless JupyterLab by default (access is gated by the Brev proxy).
-      # Set QDW_JUPYTER_TOKEN to require a token.
-      QDW_JUPYTER_TOKEN: "${QDW_JUPYTER_TOKEN:-}"
-      QDW_VNC_GEOMETRY: "${QDW_VNC_GEOMETRY:-1440x900}"
-    # Drop only the dangerous default capability while keeping what OpenMPI /
-    # the X server need. no-new-privileges still prevents setuid escalation.
+      # To require a token, set a non-empty value here.
+      QDW_JUPYTER_TOKEN: ""
+      QDW_VNC_GEOMETRY: "1440x900"
+    # Drop only the dangerous default capability behaviour while keeping what
+    # OpenMPI / the X server need. no-new-privileges prevents setuid escalation.
     security_opt:
       - no-new-privileges:true
     command: ["/home/ubuntu/qdw-workshop-materials/scripts/start-services.sh"]

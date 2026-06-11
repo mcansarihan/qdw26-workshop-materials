@@ -4,6 +4,14 @@
 # black screen, then hands off to the window manager. Run by supervisor.
 export DISPLAY=:1
 
+# The container sets QT_QPA_PLATFORM=offscreen globally so notebook kernels stay
+# headless. On the DESKTOP we want the opposite: real windows on display :1.
+# Force the Qt xcb platform here so apps launched from the desktop (KLayout, the
+# Qiskit Metal GUI, ParaView) actually render, and let matplotlib use a GUI
+# backend too.
+export QT_QPA_PLATFORM=xcb
+unset MPLBACKEND
+
 # Wait for the X server (:1) to accept connections.
 for _ in $(seq 1 100); do
   xset q >/dev/null 2>&1 && break

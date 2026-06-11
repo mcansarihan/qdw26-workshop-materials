@@ -109,12 +109,15 @@ RUN chown -R ubuntu:ubuntu /home/ubuntu/qdw-workshop-materials \
 # extensions (from Open VSX) and point the interpreter at the workshop venv so
 # the browser IDE is ready with zero setup. Extension installs are best-effort so
 # a transient Open VSX hiccup never fails the image build.
-RUN install -d -o ubuntu -g ubuntu /home/ubuntu/.local/share/code-server/User \
- && install -o ubuntu -g ubuntu \
-      /home/ubuntu/qdw-workshop-materials/scripts/desktop/code-server-settings.json \
-      /home/ubuntu/.local/share/code-server/User/settings.json \
- && (runuser -u ubuntu -- code-server --install-extension ms-python.python || echo "WARN: ms-python.python not installed") \
- && (runuser -u ubuntu -- code-server --install-extension ms-toolsai.jupyter || echo "WARN: ms-toolsai.jupyter not installed")
+# Note: runuser keeps HOME=/root, so we set HOME=/home/ubuntu explicitly and make
+# the whole ~/.local tree ubuntu-owned, otherwise code-server writes its data dir
+# as root and the extension install fails with EACCES.
+RUN mkdir -p /home/ubuntu/.local/share/code-server/User \
+ && cp /home/ubuntu/qdw-workshop-materials/scripts/desktop/code-server-settings.json \
+       /home/ubuntu/.local/share/code-server/User/settings.json \
+ && chown -R ubuntu:ubuntu /home/ubuntu/.local \
+ && (runuser -u ubuntu -- env HOME=/home/ubuntu code-server --install-extension ms-python.python || echo "WARN: ms-python.python not installed") \
+ && (runuser -u ubuntu -- env HOME=/home/ubuntu code-server --install-extension ms-toolsai.jupyter || echo "WARN: ms-toolsai.jupyter not installed")
 
 ENV PATH="/home/ubuntu/qdw-workshop-materials/.venv/bin:$PATH"
 ENV PYTHONPATH="/home/ubuntu/qdw-workshop-materials/shared/python"

@@ -184,11 +184,39 @@ Then open in your browser:
 
 Notes:
 
-- The image is `linux/amd64`. On Apple Silicon it runs under emulation (slower);
-  everything still works.
+- The image is `linux/amd64`. On Apple Silicon it runs under emulation
+  (slower) — fine for layout/analysis. See the Apple Silicon note below for the
+  Palace simulations.
 - Stop everything with `docker compose -f compose.deploy.yaml down`.
 - To rebuild from source instead of pulling, use `docker compose up --build`
   (the dev `compose.yaml`), which also bind‑mounts your local checkout.
+
+#### ⚠️ Apple Silicon (M1/M2/M3/M4): "Illegal instruction" during a Palace simulation
+
+If a **simulation** cell crashes with **`Illegal instruction`** (exit code
+`132`, `-4`, or `139`) — e.g.:
+
+```
+RuntimeError: Palace exited with status 132 ...
+palace: line 179: ... Illegal instruction   $MPIRUN $PALACE $CONFIG
+```
+
+…the cause is **how Docker emulates x86 on your Mac**, not a bug in the
+notebook. Palace is a precompiled x86 binary that uses AVX vector instructions,
+and Docker Desktop's **Rosetta** emulation does **not** support them (it traps
+them as illegal). The **QEMU** emulator does — Palace runs fine under QEMU
+(just slower), which we've verified on Apple Silicon.
+
+**Fix:** switch Docker Desktop to QEMU emulation:
+
+1. Docker Desktop → **Settings → General**.
+2. **Uncheck** "Use Rosetta for x86_64/amd64 emulation on Apple Silicon".
+3. **Apply & Restart**, then re-run the notebook.
+
+Layout/analysis cells work either way; this only affects the FEM **simulation**
+cells. If you'd rather not wait on emulation at all, run the simulation
+notebooks on the **Brev cloud workspace** (native x86) or any Intel/AMD Linux
+machine — they're dramatically faster there.
 
 </details>
 
@@ -240,6 +268,7 @@ paths. (Reverse the arguments to upload files *to* your workspace.)
 | Web desktop is black / empty | Right‑click the background for the app menu. If the bottom bar shows a workspace other than "Workshop", click the ◄ arrow to get back to it. Then refresh `/vnc.html` → **Connect**. |
 | KLayout / a GUI app won't open | Open it from the desktop terminal (`klayout`) and read any error there; make sure you're using the **6080** desktop, not a notebook. |
 | Palace: "not enough slots available" | Already handled (cores are auto-detected). If you raised `QDW_PALACE_CPUS`, lower it to ≤ your instance's physical cores. |
+| Palace: "Illegal instruction" (exit 132 / -4 / 139) — **local Docker on Apple Silicon only** | Docker's Rosetta emulation can't run Palace's AVX instructions. Switch Docker Desktop to QEMU (Settings → General → uncheck "Use Rosetta…"), or run sims on the Brev workspace. See the Apple Silicon note in "Run everything locally with Docker". |
 | Want VS Code but local Cursor/SSH is acting up | Use the in-browser VS Code on port **8080** (Section 2) — it avoids all SSH/attach issues. |
 | Lost the port URL | Reopen it from the Brev console, or re‑run `brev port-forward`. |
 

@@ -1,0 +1,9 @@
+{
+  "python.defaultInterpreterPath": "/home/ubuntu/qdw-workshop-materials/.venv/bin/python",
+  "python.terminal.activateEnvironment": false,
+  "security.workspace.trust.enabled": false,
+  "telemetry.telemetryLevel": "off",
+  "workbench.startupEditor": "readme",
+  "extensions.autoCheckUpdates": false,
+  "update.mode": "none"
+}

@@ -11,12 +11,60 @@ import json
 import socket
 
 
-def palace_cpu_count(default: int) -> int:
-    """Return a portable Palace CPU count for local, CI, and hosted runs."""
+def _physical_cpu_slots() -> int:
+    """Best-effort count of physical CPU cores = MPI launch slots.
 
-    requested = int(os.environ.get("QDW_PALACE_CPUS", str(default)))
-    available = os.cpu_count() or 1
-    return max(1, min(requested, available))
+    MPI/PRRTE counts a "slot" per physical core, NOT per hardware thread, and
+    refuses to launch more ranks than slots ("not enough slots available").
+    ``os.cpu_count()`` returns logical CPUs (hyperthreads), so on a 16-vCPU /
+    8-core cloud box it reports 16 while only 8 MPI slots exist — asking for 10
+    then fails. Prefer the physical-core count; fall back conservatively.
+    """
+
+    try:
+        import psutil
+
+        physical = psutil.cpu_count(logical=False)
+        if physical:
+            return int(physical)
+    except Exception:
+        pass
+
+    logical = os.cpu_count() or 1
+    # Assume 2-way SMT (the common cloud case) when physical cores are unknown.
+    return max(1, logical // 2 if logical > 1 else 1)
+
+
+def palace_cpu_count(default: int | None = None) -> int:
+    """Return a safe number of CPU cores for Palace (local, CI, and hosted).
+
+    The value never exceeds the machine's MPI slots (physical cores), so Palace
+    never fails with "not enough slots available". Resolution order:
+
+    1. ``QDW_PALACE_CPUS`` environment variable, if set — this is the knob
+       attendees use to dial the core count up or down (keep it <= your
+       instance's physical cores).
+    2. Otherwise, the machine's physical-core count.
+
+    ``default``, if given, is treated as an *upper bound* (not a fixed request),
+    so callers can cap usage without ever over-subscribing.
+    """
+
+    slots = _physical_cpu_slots()
+
+    override = os.environ.get("QDW_PALACE_CPUS")
+    if override:
+        try:
+            n = int(override)
+        except ValueError:
+            n = slots
+    else:
+        n = slots
+
+    if default is not None:
+        n = min(n, int(default))
+
+    return max(1, n)
 
 
 def capacitance_dataframe(cap_matrix, labels: list[str], order: list[str] | None = None):

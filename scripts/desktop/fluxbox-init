@@ -1,0 +1,9 @@
+! Minimal fluxbox config for the workshop desktop.
+! ONE workspace only — avoids the "blank screen because you're on an empty
+! virtual desktop" trap (apps always launch where the attendee is looking).
+session.screen0.workspaces:	1
+session.screen0.workspaceNames:	Workshop,
+session.screen0.toolbar.widthPercent:	100
+session.screen0.toolbar.placement:	BottomCenter
+session.screen0.toolbar.tools:	clock, iconbar, systemtray
+session.screen0.windowPlacement:	CascadePlacement

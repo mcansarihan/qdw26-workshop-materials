@@ -86,9 +86,32 @@ nothing to install.**
 3. Open any notebook under `workshops/…/notebooks/` and run cells, or open a
    `.py` file and use the integrated terminal + debugger. Breakpoints work.
 
-> This is the recommended way to use VS Code here. (Connecting your *local*
-> desktop VS Code / Cursor over SSH is possible but fiddly on hosted instances —
-> the in‑browser VS Code above avoids all of that and gives the same experience.)
+> This is the recommended way to use VS Code here.
+
+### Power-user: your *local* VS Code / Cursor (attach to the container)
+
+You can also drive the workspace from your **local** VS Code or Cursor, but it
+takes a couple of steps and one required setting. The in-browser VS Code above is
+simpler — use this only if you specifically want your local editor.
+
+1. From your **laptop terminal**, let Brev wire up SSH and open your editor (do
+   **not** type the instance name into "Connect to Host" manually — that fails to
+   resolve):
+   ```bash
+   brev open <your-workspace-name> cursor    # or: ... code
+   ```
+2. **Cursor only — one required setting.** Cursor's container-attach crashes
+   while copying your git config (`Failed to read .gitconfig … path … undefined`).
+   In Cursor → **Settings (JSON)**, add:
+   ```json
+   "dev.containers.copyGitConfig": false
+   ```
+3. Command Palette → **"Dev Containers: Attach to Running Container"** → pick the
+   container ending in **`-dev-1`** (e.g. `workspace-dev-1`) → open
+   `/home/ubuntu/qdw-workshop-materials` and select the `.venv` interpreter.
+
+If any of this misbehaves, fall back to the in-browser VS Code (port 8080) — it
+gives the same experience with none of the SSH/attach setup.
 
 ---
 
@@ -270,6 +293,8 @@ paths. (Reverse the arguments to upload files *to* your workspace.)
 | Palace: "not enough slots available" | Already handled (cores are auto-detected). If you raised `QDW_PALACE_CPUS`, lower it to ≤ your instance's physical cores. |
 | Palace: "Illegal instruction" (exit 132 / -4 / 139) — **local Docker on Apple Silicon only** | Docker's Rosetta emulation can't run Palace's AVX instructions. Switch Docker Desktop to QEMU (Settings → General → uncheck "Use Rosetta…"), or run sims on the Brev workspace. See the Apple Silicon note in "Run everything locally with Docker". |
 | Want VS Code but local Cursor/SSH is acting up | Use the in-browser VS Code on port **8080** (Section 2) — it avoids all SSH/attach issues. |
+| Cursor attach: "Could not resolve hostname …" | Don't type the instance name into "Connect to Host". Open it via `brev open <name> cursor` from your terminal so Brev sets up SSH. |
+| Cursor attach: "Failed to read .gitconfig … path … undefined" | In Cursor → Settings (JSON) add `"dev.containers.copyGitConfig": false`, then retry "Attach to Running Container". |
 | Lost the port URL | Reopen it from the Brev console, or re‑run `brev port-forward`. |
 
 Stuck? Reach the organizers at **quantum.ucla@gmail.com**.

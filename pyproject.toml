@@ -7,6 +7,8 @@ requires-python = ">=3.11,<3.13"
 dependencies = [
     "django>=5.2.14",
     "idna>=3.15",
+    "ipympl>=0.9.7",
+    "ipyvuetify>=1.11.3",
     "jupyter>=1.1.1",
     "jupyter-server>=2.18.0",
     "jupyterlab>=4.5.7",

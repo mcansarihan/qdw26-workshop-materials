@@ -1,0 +1,19 @@
+name: 💡 Suggestion / enhancement
+description: Suggest an improvement to the materials, environment, or docs.
+title: "[Idea] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like?
+      description: Describe the improvement, new material, or change.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why / use case
+      description: What problem does it solve, or who benefits?
+    validations:
+      required: false

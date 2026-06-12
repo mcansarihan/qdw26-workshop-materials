@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Troubleshooting & connect guide
+    url: https://github.com/quantum-device-consortium/qdw26-workshop-materials#8---troubleshooting
+    about: Most setup/connection issues are already covered in the README — please skim it first.
+  - name: 💬 Email the organizers
+    url: mailto:quantum.ucla@gmail.com
+    about: For non-issue questions (e.g. Brev account or workshop-credit problems).

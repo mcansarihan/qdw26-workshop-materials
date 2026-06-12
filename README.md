@@ -92,9 +92,9 @@ to locally on the day. Here's the full map:
 | --------------------------------- | -------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Design & Layout**               | Day 1 · Mon Jun 15 · 4:15–5:00 PM      | Murat Can Sarihan                | [`workshops/quantum-device-design/`](https://github.com/quantum-device-consortium/qdw26-workshop-materials/tree/main/workshops/quantum-device-design)             |
 | **Circuit Analysis & Simulation** | Day 2 · Tue Jun 16 · 11:15 AM–12:00 PM | Jens Koch                        | [`workshops/circuit-analysis/`](https://github.com/quantum-device-consortium/qdw26-workshop-materials/tree/main/workshops/circuit-analysis)                       |
-| **EM Simulations**                | Day 2 · Tue Jun 16 · 2:15–3:00 PM      | Firas Abouzahr · Sara Sussman    | [`workshops/electromagnetic-simulations/`](https://github.com/quantum-device-consortium/qdw26-workshop-materials/tree/main/workshops/electromagnetic-simulations) |
-| **Full Device Simulation**        | Day 2 · Tue Jun 16 · 4:15–5:00 PM      | Dane Thompson (Synopsys / Qolab) | 🖥️ **Runs locally** (Ansys, handed out Day 1) - [setup guide](https://github.com/quantum-device-consortium/qdw26-workshop-materials/blob/main/docs/ansys-setup.md)                                                                       |
-| **EM & Circuit Analysis**         | Day 3 · Wed Jun 17 · 1:30–2:15 PM      | David Pahl & Lucas Pahl (MIT)    | 🌐 **Runs locally** - a browser-based tool you'll connect to. Not in this repo.                                                                                   |
+| **EM Simulations**                | Day 2 · Tue Jun 16 · 2:15–3:00 PM      | Firas Abouzahr & Sara Sussman    | [`workshops/electromagnetic-simulations/`](https://github.com/quantum-device-consortium/qdw26-workshop-materials/tree/main/workshops/electromagnetic-simulations) |
+| **Full Device Simulation**        | Day 2 · Tue Jun 16 · 4:15–5:00 PM      | Dane Thompson | 🖥️ **Runs locally** (Ansys, handed out Day 1) - [setup guide](https://github.com/quantum-device-consortium/qdw26-workshop-materials/blob/main/docs/ansys-setup.md)                                                                       |
+| **EM & Circuit Analysis**         | Day 3 · Wed Jun 17 · 1:30–2:15 PM      | David Pahl & Lucas Pahl     | 🌐 **Runs locally** - a browser-based tool you'll connect to. Not in this repo.                                                                                   |
 | **Design Project**                | Day 4 · Thu Jun 18 (all day)           | Murat Can Sarihan                | [`workshops/design-project/`](https://github.com/quantum-device-consortium/qdw26-workshop-materials/tree/main/workshops/design-project)                           |
 
 > **Heads-up on the two "runs locally" workshops:**
@@ -347,6 +347,22 @@ permanent storage.** Before the workshop ends, download anything you want to kee
 
 </details>
 
+<details>
+<summary>How to upload files <em>to</em> your workspace - for each way you connect</summary>
+
+- **JupyterLab (8888):** click the **↑ Upload** button at the top of the file
+  browser, or just **drag files** from your computer into it.
+- **VS Code / code-server (8080):** **drag files** from your computer into the
+  Explorer pane, or right-click a folder → **Upload…**.
+- **Brev CLI (whole folders):** from your laptop terminal - the same `brev copy`,
+  with the paths **reversed** (local first, workspace second):
+  ```bash
+  brev copy ./my-file.gds <your-workspace-name>:/home/ubuntu/qdw-workshop-materials/
+  ```
+  _(That's the opposite argument order from downloading.)_
+
+</details>
+
 ---
 
 ## 8 - Troubleshooting
@@ -361,7 +377,7 @@ permanent storage.** Before the workshop ends, download anything you want to kee
 | KLayout/GUI won't appear                                          | Use the **`6080` desktop** (section 5), not a notebook; right-click the desktop for the app menu.                                                |
 | A simulation says _"not enough slots"_ or _"Illegal instruction"_ | On the Brev workspace this is already handled. Locally on Apple Silicon, see the [Docker note](#6---run-everything-locally-with-docker-advanced). |
 
-**Still stuck?** Pleae create an [Issue]().
+**Still stuck?** The quickest way to get help is to [open an issue](https://github.com/quantum-device-consortium/qdw26-workshop-materials/issues/new/choose). For non-issue questions (Brev account / credits) you can also email the organizers at **quantum.ucla@gmail.com**.
 
 ---
 

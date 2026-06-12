@@ -169,6 +169,31 @@ to touch this.
 
 ---
 
+## Installing extra Python packages
+
+Writing your own code and need a library that isn't installed? Add it yourself —
+there's nothing to set up.
+
+All notebooks and terminals share **one virtual environment** at
+`/home/ubuntu/qdw-workshop-materials/.venv` (it's already on your `PATH` and is
+the kernel behind every notebook), so just install straight into it:
+
+- **From a notebook (recommended):** `%pip install <package>` — this targets the
+  exact kernel the cell runs in, so it always goes to the right place.
+- **From a terminal** (Jupyter / VS Code / desktop): `pip install <package>`
+  (or `uv pip install <package>` — same thing, just faster).
+
+> **Don't** make a new venv or use `/usr/bin/python3` — the workshop kernels only
+> see `.venv`, so anything installed elsewhere won't import in your notebooks.
+
+Check it landed with `import <package>; print(<package>.__version__)` (or
+`pip show <package>`); if a notebook can't see it yet, **restart the kernel**.
+Installed packages **persist across pause/resume** but are reset by a full
+redeploy — keep an `extras.txt` and `pip install -r extras.txt` if you want them
+back quickly.
+
+---
+
 ## Pause between sessions, resume in seconds
 
 To preserve your allotted compute, **pause (stop) your workspace whenever you're

@@ -4,8 +4,8 @@ This repository contains all the workshop materials for QDW 2026.
 
 **You don't need to install anything.** Everything runs in a cloud workspace that already has all the tools pre-built - you just connect a browser tab (or your own editor) and start working :)
 
-> **In a hurry?** Read **[1 - Get your workspace](#1--get-your-workspace)**,
-> then **[4 - Connect](#4--connect-three-ways)**, and use the
+> **In a hurry?** Read **[1 - Get your workspace](#1---get-your-workspace)**,
+> then **[4 - Connect](#4---connect-three-ways)**, and use the
 > **VS Code in the browser** link. That's enough to follow along with every
 > workshop.
 
@@ -13,14 +13,14 @@ This repository contains all the workshop materials for QDW 2026.
 
 ## Contents
 
-- [1 - Get your workspace (Brev + NVIDIA credits)](#1--get-your-workspace)
-- [2 - What's in this repo & the workshop schedule](#2--whats-in-this-repo--the-schedule)
-- [3 - Your workspace, start to finish](#3--your-workspace-start-to-finish)
-- [4 - Connect (three ways)](#4--connect-three-ways)
-- [5 - GUI apps (KLayout, ParaView)](#5--gui-apps-klayout-paraview)
-- [6 - Run everything locally with Docker (advanced)](#6--run-everything-locally-with-docker-advanced)
-- [7 - Good to know](#7--good-to-know)
-- [8 - Troubleshooting](#8--quick-troubleshooting)
+- [1 - Get your workspace (Brev + NVIDIA credits)](#1---get-your-workspace)
+- [2 - What's in this repo & the workshop schedule](#2---whats-in-this-repo--the-schedule)
+- [3 - Your workspace, start to finish](#3---your-workspace-start-to-finish)
+- [4 - Connect (three ways)](#4---connect-three-ways)
+- [5 - GUI apps (KLayout, ParaView)](#5---gui-apps-klayout-paraview)
+- [6 - Run everything locally with Docker (advanced)](#6---run-everything-locally-with-docker-advanced)
+- [7 - Good to know](#7---good-to-know)
+- [8 - Troubleshooting](#8---troubleshooting)
 - [For maintainers & contributors](#for-maintainers--contributors)
 
 ---
@@ -140,7 +140,7 @@ table of ready-to-click URLs:
 | ------ | ------------------ | ---------------------------------------------------------------------------------------- |
 | `8080` | `vs-code-web-…`    | **VS Code in the browser** ⭐ recommended                                                |
 | `8888` | `jupyter-lab-…`    | **JupyterLab** in the browser                                                            |
-| `6080` | `no-vnc-desktop-…` | **Desktop** for GUI apps (KLayout etc.) - see [section 5](#5--gui-apps-klayout-paraview) |
+| `6080` | `no-vnc-desktop-…` | **Desktop** for GUI apps (KLayout etc.) - see [section 5](#5---gui-apps-klayout-paraview) |
 
 > **We recommend the `vs-code-web` route**
 
@@ -338,7 +338,7 @@ permanent storage.** Before the workshop ends, download anything you want to kee
 | Cursor attach: _"Failed to read .gitconfig … path … undefined"_   | Add `"dev.containers.copyGitConfig": false` to Cursor settings (JSON), then retry.                                                               |
 | Editor shows only `/usr/bin/python3` / "ipykernel missing"        | Your editor is on the host, not the container - redo [4c step 3](#c-your-own-local-vs-code--cursor), or just use the browser VS Code.            |
 | KLayout/GUI won't appear                                          | Use the **`6080` desktop** (section 5), not a notebook; right-click the desktop for the app menu.                                                |
-| A simulation says _"not enough slots"_ or _"Illegal instruction"_ | On the Brev workspace this is already handled. Locally on Apple Silicon, see the [Docker note](#6--run-everything-locally-with-docker-advanced). |
+| A simulation says _"not enough slots"_ or _"Illegal instruction"_ | On the Brev workspace this is already handled. Locally on Apple Silicon, see the [Docker note](#6---run-everything-locally-with-docker-advanced). |
 
 **Still stuck?** Pleae create an [Issue]().
 

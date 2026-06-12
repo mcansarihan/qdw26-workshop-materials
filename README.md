@@ -326,14 +326,23 @@ Stop everything with `docker compose -f compose.deploy.yaml down`.
 > ⚠️ **Pause your workspace between sessions** - _Stop_ it in
 > the Brev console whenever you're not actively in a hands-on session.
 
-### Saving your work for the long term
+### What persists (and what doesn't)
 
-Your files persist while the workspace exists, but **don't treat the workspace as
-permanent storage.** Before the workshop ends, download anything you want to keep
-(or push it to your **own** Git repo).
+Everything you do lives inside your workspace's container - there are **no
+external volumes attached**. So:
+
+- **Pause → resume** (the normal _Stop_ / _Start_ flow): your files **and** any
+  packages you installed are **kept** - they're on the workspace's persistent disk.
+- **Tear down → redeploy** the launchable from scratch: you're reset to the
+  pre-built baseline - your files and extra packages are **gone**.
+
+Don't treat the workspace as permanent storage: before the workshop ends,
+**download anything you want to keep** (or push it to your own fork of this Git repo).
+
+### Transferring files (download & upload)
 
 <details>
-<summary>How to download your work - for each way you connect</summary>
+<summary>Download your work <em>from</em> the workspace - for each way you connect</summary>
 
 - **JupyterLab (8888):** right-click a file in the file browser → **Download**.
 - **VS Code / code-server (8080):** right-click a file → **Download…**.
@@ -348,7 +357,7 @@ permanent storage.** Before the workshop ends, download anything you want to kee
 </details>
 
 <details>
-<summary>How to upload files <em>to</em> your workspace - for each way you connect</summary>
+<summary>Upload files <em>to</em> your workspace - for each way you connect</summary>
 
 - **JupyterLab (8888):** click the **↑ Upload** button at the top of the file
   browser, or just **drag files** from your computer into it.
@@ -362,6 +371,45 @@ permanent storage.** Before the workshop ends, download anything you want to kee
   _(That's the opposite argument order from downloading.)_
 
 </details>
+
+### Installing & updating Python packages
+
+If you want to add a package that isn't already included, here is how you can add it yourself.
+
+**Which environment you install into.** Every workshop notebook and terminal uses
+**one shared virtual environment** at `/home/ubuntu/qdw-workshop-materials/.venv`.
+Its `python` is first on your `PATH` and is the single kernel behind every
+notebook, so you never pick or activate anything - whatever you install goes
+straight there.
+
+> This image uses **`uv`** (a fast drop-in for pip), and **plain `pip` is not
+> installed.** Always use **`uv pip`** - it's pre-installed and targets the
+> workshop `.venv` automatically, from anywhere in your workspace.
+
+**From a terminal** (Jupyter / VS Code / desktop):
+
+```bash
+uv pip install <package>        # e.g. uv pip install pandas
+```
+
+**From inside a notebook**, prefix the same command with `!`:
+
+```python
+!uv pip install <package>
+import <package>                 # works right away - no kernel restart needed
+```
+
+_(You may need to restart the kernel if it doesn't see the package or if you're **upgrading** a package you've already imported in that session)_
+
+**Confirm it worked:**
+
+```bash
+!uv pip show <package> # without ! if you're in a terminal
+```
+
+
+> **Will it survive?** Yes across pause/resume. No across a full redeploy
+> (see [What persists](#what-persists-and-what-doesnt) above).
 
 ---
 

@@ -93,14 +93,15 @@ to locally on the day. Here's the full map:
 | **Design & Layout**               | Day 1 · Mon Jun 15 · 4:15–5:00 PM      | Murat Can Sarihan                | [`workshops/quantum-device-design/`](https://github.com/quantum-device-consortium/qdw26-workshop-materials/tree/main/workshops/quantum-device-design)             |
 | **Circuit Analysis & Simulation** | Day 2 · Tue Jun 16 · 11:15 AM–12:00 PM | Jens Koch                        | [`workshops/circuit-analysis/`](https://github.com/quantum-device-consortium/qdw26-workshop-materials/tree/main/workshops/circuit-analysis)                       |
 | **EM Simulations**                | Day 2 · Tue Jun 16 · 2:15–3:00 PM      | Firas Abouzahr · Sara Sussman    | [`workshops/electromagnetic-simulations/`](https://github.com/quantum-device-consortium/qdw26-workshop-materials/tree/main/workshops/electromagnetic-simulations) |
-| **Full Device Simulation**        | Day 2 · Tue Jun 16 · 4:15–5:00 PM      | Dane Thompson (Synopsys / Qolab) | 🖥️ **Runs locally** - Ansys licenses + files are handed out on **Day 1**. Not in this repo.                                                                       |
+| **Full Device Simulation**        | Day 2 · Tue Jun 16 · 4:15–5:00 PM      | Dane Thompson (Synopsys / Qolab) | 🖥️ **Runs locally** (Ansys, handed out Day 1) - [setup guide](https://github.com/quantum-device-consortium/qdw26-workshop-materials/blob/main/docs/ansys-setup.md)                                                                       |
 | **EM & Circuit Analysis**         | Day 3 · Wed Jun 17 · 1:30–2:15 PM      | David Pahl & Lucas Pahl (MIT)    | 🌐 **Runs locally** - a browser-based tool you'll connect to. Not in this repo.                                                                                   |
 | **Design Project**                | Day 4 · Thu Jun 18 (all day)           | Murat Can Sarihan                | [`workshops/design-project/`](https://github.com/quantum-device-consortium/qdw26-workshop-materials/tree/main/workshops/design-project)                           |
 
 > **Heads-up on the two "runs locally" workshops:**
 >
 > - **Full Device Simulation** uses **Ansys** - you'll get a license + the files
->   to run it on your own laptop, distributed on Day 1.
+>   to run it on your own laptop, distributed on Day 1. Install ahead of time with
+>   the **[Ansys HFSS setup guide](https://github.com/quantum-device-consortium/qdw26-workshop-materials/blob/main/docs/ansys-setup.md)**.
 > - **EM & Circuit Analysis** uses a **browser-based tool** from the MIT team -
 >   you'll connect to it on the day; nothing to install ahead of time.
 
@@ -152,17 +153,23 @@ Python + Jupyter extensions installed and the right kernel selected. Open any
 notebook under `workshops/…` and run it.
 
 <details>
-<summary>Prefer the command line? (Brev CLI)</summary>
+<summary>Prefer the command line? (open it without clicking)</summary>
+
+One-time setup (macOS shown — see the Access page for other OSes):
 
 ```bash
-# one-time: install + log in
-brew install brevdev/homebrew-brev/brev   # macOS (see the Access page for other OSes)
+brew install brevdev/homebrew-brev/brev
 brev login
-
-# forward the VS Code port to your laptop, then open the URL it prints
-brev port-forward <your-workspace-name> -p 8080:8080 # `brev ls` can give your workspace name info
-# → open http://localhost:8080
 ```
+
+**Paste this to open VS Code in your browser** — it finds your running workspace automatically:
+
+```bash
+ID=$(brev ls --json | python3 -c "import json,sys;print(next(w['id'] for w in json.load(sys.stdin)['workspaces'] if w['status']=='RUNNING'))")
+python3 -m webbrowser "https://vs-code-web-$ID.brevlab.com"
+```
+
+Or forward the port to localhost instead: `brev port-forward <your-workspace-name> -p 8080:8080` → <http://localhost:8080>
 
 </details>
 
@@ -173,12 +180,16 @@ the workshop kernel already selected. In the file browser, open
 `workshops/…/notebooks/` and run cells with **Shift+Enter**.
 
 <details>
-<summary>Prefer the command line? (Brev CLI)</summary>
+<summary>Prefer the command line? (open it without clicking)</summary>
+
+**Paste this to open JupyterLab in your browser:**
 
 ```bash
-brev port-forward <your-workspace-name> -p 8888:8888
-# → open http://localhost:8888
+ID=$(brev ls --json | python3 -c "import json,sys;print(next(w['id'] for w in json.load(sys.stdin)['workspaces'] if w['status']=='RUNNING'))")
+python3 -m webbrowser "https://jupyter-lab-$ID.brevlab.com"
 ```
+
+Or forward the port to localhost instead: `brev port-forward <your-workspace-name> -p 8888:8888` → <http://localhost:8888>
 
 </details>
 
@@ -254,13 +265,23 @@ install).
    _File → Open_ to load a `.gds` (export one from a notebook with
    `design.export_to_gds("my_chip.gds")` first).
 
+<img src="https://raw.githubusercontent.com/quantum-device-consortium/qdw26-workshop-materials/main/docs/images/vnc-right-click-terminal.png" alt="The web desktop: welcome terminal and the right-click app menu" width="720" />
+
+With KLayout and ParaView open, it looks like this:
+
+<img src="https://raw.githubusercontent.com/quantum-device-consortium/qdw26-workshop-materials/main/docs/images/vnc-apps-opened.png" alt="KLayout and ParaView open on the web desktop" width="720" />
+
 <details>
-<summary>Prefer the command line? (Brev CLI)</summary>
+<summary>Prefer the command line? (open it without clicking)</summary>
+
+**Paste this to open the desktop in your browser** — it finds your running workspace automatically:
 
 ```bash
-brev port-forward <your-workspace-name> -p 6080:6080
-# → open http://localhost:6080/vnc.html  →  Connect
+ID=$(brev ls --json | python3 -c "import json,sys;print(next(w['id'] for w in json.load(sys.stdin)['workspaces'] if w['status']=='RUNNING'))")
+python3 -m webbrowser "https://no-vnc-desktop-$ID.brevlab.com/vnc_lite.html"
 ```
+
+Or forward the port instead: `brev port-forward <your-workspace-name> -p 6080:6080` → <http://localhost:6080/vnc.html>
 
 </details>
 

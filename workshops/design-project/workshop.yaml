@@ -1,0 +1,34 @@
+slug: design-project
+title: Design Project
+leads:
+  - Murat Can Sarihan
+summary: Open-ended capstone — design, simulate, and analyze your own superconducting device using the full Quantum Metal -> SQDMetal -> Palace flow.
+entrypoints:
+  - path: notebooks/05_project.ipynb
+    kind: notebook
+    description: Project brief — the open-ended design challenge and deliverables.
+notebooks:
+  - notebooks/05_project.ipynb
+  - notebooks/solutions/05_project_layout.ipynb
+  - notebooks/solutions/05_project_solution_simulations.ipynb
+assets:
+python_dependencies:
+  - jupyter
+  - quantum-metal
+  - sqdmetal
+system_dependencies:
+  - gmsh
+  - palace
+smoke_commands:
+  - test -f notebooks/05_project.ipynb
+  - python -c "import importlib.util; assert importlib.util.find_spec('qiskit_metal') is not None"
+execution_targets:
+  - path: notebooks/05_project.ipynb
+    kind: notebook
+    timeout_seconds: 600
+  - path: notebooks/solutions/05_project_layout.ipynb
+    kind: notebook
+    timeout_seconds: 900
+  - path: notebooks/solutions/05_project_solution_simulations.ipynb
+    kind: notebook
+    timeout_seconds: 2400

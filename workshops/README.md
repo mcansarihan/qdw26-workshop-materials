@@ -5,8 +5,13 @@ dependencies, and smoke checks in `workshop.yaml`.
 
 ## Current Materials
 
-- `quantum-device-design/`: Qiskit Metal, Palace, and SQDMetal tutorial materials.
-- `electromagnetic-simulations/`: Qiskit Metal, Palace, and pyPalace tutorial materials.
+- `quantum-device-design/`: **Design & Layout** (Day 1) — Quantum Metal, SQDMetal, Palace.
+- `circuit-analysis/`: **Circuit Analysis & Simulation** (Day 2) — scqubits.
+- `electromagnetic-simulations/`: **EM Simulations** (Day 2) — Quantum Metal, pyPalace, Palace.
+- `design-project/`: **Design Project** (Day 4) — open-ended capstone.
+
+See the top-level [`README.md`](../README.md) for the full schedule (including the
+two workshops that run on locally-installed tools).
 
 ## Required Layout
 

@@ -1,0 +1,60 @@
+name: 🐛 Problem / bug report
+description: Something isn't working — a notebook errors, you can't connect, the desktop won't open, etc.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! First, please skim the
+        [README troubleshooting](https://github.com/quantum-device-consortium/qdw26-workshop-materials#8---troubleshooting)
+        — common issues (Cursor attach, KLayout not showing, Apple-Silicon Palace crashes) are already covered there.
+  - type: input
+    id: where
+    attributes:
+      label: Which workshop / notebook (or "workspace setup")?
+      placeholder: e.g. electromagnetic-simulations / eigenmode_EPR.ipynb
+    validations:
+      required: false
+  - type: dropdown
+    id: how
+    attributes:
+      label: How are you connecting?
+      options:
+        - JupyterLab (browser, 8888)
+        - VS Code in the browser / code-server (8080)
+        - Local VS Code / Cursor (attach to container)
+        - noVNC desktop (6080)
+        - Local Docker (own machine)
+        - Other / not sure
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what actually went wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error message / traceback
+      description: Paste the full error or log output — it will be auto-formatted.
+      render: shell
+    validations:
+      required: false
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots (optional)
+      description: Drag images in if a picture helps.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked the README troubleshooting section
+        - label: I searched existing issues for the same problem

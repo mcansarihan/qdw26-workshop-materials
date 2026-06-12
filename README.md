@@ -347,6 +347,22 @@ permanent storage.** Before the workshop ends, download anything you want to kee
 
 </details>
 
+<details>
+<summary>How to upload files <em>to</em> your workspace - for each way you connect</summary>
+
+- **JupyterLab (8888):** click the **↑ Upload** button at the top of the file
+  browser, or just **drag files** from your computer into it.
+- **VS Code / code-server (8080):** **drag files** from your computer into the
+  Explorer pane, or right-click a folder → **Upload…**.
+- **Brev CLI (whole folders):** from your laptop terminal - the same `brev copy`,
+  with the paths **reversed** (local first, workspace second):
+  ```bash
+  brev copy ./my-file.gds <your-workspace-name>:/home/ubuntu/qdw-workshop-materials/
+  ```
+  _(That's the opposite argument order from downloading.)_
+
+</details>
+
 ---
 
 ## 8 - Troubleshooting
@@ -361,7 +377,7 @@ permanent storage.** Before the workshop ends, download anything you want to kee
 | KLayout/GUI won't appear                                          | Use the **`6080` desktop** (section 5), not a notebook; right-click the desktop for the app menu.                                                |
 | A simulation says _"not enough slots"_ or _"Illegal instruction"_ | On the Brev workspace this is already handled. Locally on Apple Silicon, see the [Docker note](#6---run-everything-locally-with-docker-advanced). |
 
-**Still stuck?** Pleae create an [Issue]().
+**Still stuck?** Please [open an issue](https://github.com/quantum-device-consortium/qdw26-workshop-materials/issues/new/choose) — or, if you're in a live session, email the organizers at **quantum.ucla@gmail.com** for the quickest help.
 
 ---
 

@@ -1,0 +1,18 @@
+slug: circuit-analysis
+title: Circuit Analysis & Simulation
+leads:
+  - Jens Koch
+summary: Circuit-Hamiltonian analysis and simulation of superconducting qubits with scqubits.
+# NOTE TO MAINTAINERS: the workshop lead (Jens Koch) provides the scqubits
+# notebooks. Drop them in notebooks/ and then add them to `entrypoints`,
+# `notebooks`, and `execution_targets` below so CI executes them.
+entrypoints:
+notebooks:
+assets:
+python_dependencies:
+  - jupyter
+  - scqubits
+system_dependencies:
+smoke_commands:
+  - python -c "import importlib.util; assert importlib.util.find_spec('scqubits') is not None"
+execution_targets:

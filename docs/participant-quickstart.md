@@ -61,11 +61,15 @@ The zero‑setup path — recommended for everyone, especially to start.
 1. Open port **`8888`** for your workspace (see "Accessing a port" above).
 2. JupyterLab opens directly — **no password, no token, no environment to pick**.
    The workshop kernel (with every package) is already the default.
-3. In the file browser on the left, open:
-   - `workshops/quantum-device-design/notebooks/` — start at `01_welcome.ipynb`
-     and work upward (`02_…`, `03_…`, `04_…`, `05_project.ipynb`).
-   - `workshops/electromagnetic-simulations/notebooks/` — `eigenmode_EPR.ipynb`
-     and `electrostatic_LOM.ipynb`.
+3. In the file browser on the left, open the folder for your session (each has
+   its own README):
+   - `workshops/quantum-device-design/notebooks/` — Design & Layout: start at
+     `01_welcome.ipynb` and work upward (`02_…`, `03_…`, `04_…`).
+   - `workshops/circuit-analysis/notebooks/` — Circuit Analysis & Simulation
+     (scqubits).
+   - `workshops/electromagnetic-simulations/notebooks/` — EM Simulations:
+     `eigenmode_EPR.ipynb` and `electrostatic_LOM.ipynb`.
+   - `workshops/design-project/notebooks/` — the Day-4 capstone (`05_project.ipynb`).
 4. Run cells with **Shift+Enter**. Layout previews and plots render inline.
 
 That's it — you're ready for the whole workshop from here.

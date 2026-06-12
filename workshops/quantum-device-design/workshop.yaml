@@ -1,8 +1,8 @@
 slug: quantum-device-design
-title: Quantum Device Design Tutorials
+title: Design & Layout
 leads:
-  - zlatko-minev
-summary: Qiskit Metal, Palace, and SQDMetal tutorials for quantum device design workflows.
+  - Murat Can Sarihan
+summary: Quantum Metal, SQDMetal, and Palace tutorials for superconducting device layout and simulation.
 entrypoints:
   - path: notebooks/01_welcome.ipynb
     kind: notebook
@@ -15,7 +15,6 @@ notebooks:
   - notebooks/02_first_chip_layout.ipynb
   - notebooks/03_transmon_and_resonator.ipynb
   - notebooks/04_qubit_qubit_coupling.ipynb
-  - notebooks/05_project.ipynb
 assets:
   - assets/1.jpg
 python_dependencies:
@@ -43,12 +42,3 @@ execution_targets:
   - path: notebooks/04_qubit_qubit_coupling.ipynb
     kind: notebook
     timeout_seconds: 1800
-  - path: notebooks/05_project.ipynb
-    kind: notebook
-    timeout_seconds: 600
-  - path: notebooks/solutions/05_project_layout.ipynb
-    kind: notebook
-    timeout_seconds: 900
-  - path: notebooks/solutions/05_project_solution_simulations.ipynb
-    kind: notebook
-    timeout_seconds: 2400

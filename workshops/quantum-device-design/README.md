@@ -1,4 +1,6 @@
-# Quantum Device Design
+# Design & Layout
+
+**Workshop lead:** Murat Can Sarihan · **When:** Day 1 (June 15), 4:15 – 5:00 PM
 
 ## Start Here
 
@@ -8,7 +10,9 @@ Recommended notebook sequence:
 2. `notebooks/02_first_chip_layout.ipynb`
 3. `notebooks/03_transmon_and_resonator.ipynb`
 4. `notebooks/04_qubit_qubit_coupling.ipynb`
-5. `notebooks/05_project.ipynb`
+
+The open-ended capstone that builds on these has moved to its own folder:
+[`../design-project/`](../design-project/) (Day 4).
 
 Supporting files are in `assets/` and `references/`. Reference papers should
 be cited or linked unless redistribution rights are explicit.

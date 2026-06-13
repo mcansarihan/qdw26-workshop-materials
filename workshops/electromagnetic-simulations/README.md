@@ -1,5 +1,7 @@
 # Simulating **Quantum Metal** Designs with **Palace** and **pyPalace**
 
+Workshop lead: Firas Abouzahr · When: Day 2 (June 16)
+
 ## Start Here
 
 **Prerequisite:** complete the transmon–resonator layout in the

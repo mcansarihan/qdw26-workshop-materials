@@ -14,7 +14,9 @@ entrypoints:
 notebooks:
   - notebooks/eigenmode_EPR.ipynb
   - notebooks/electrostatic_LOM.ipynb
+  - notebooks/driven_resonator.ipynb
 assets:
+  - assets/driven_output/port-S.csv
 python_dependencies:
   - jupyter
   - quantum-metal
@@ -26,6 +28,8 @@ system_dependencies:
 smoke_commands:
   - test -f notebooks/eigenmode_EPR.ipynb
   - test -f notebooks/electrostatic_LOM.ipynb
+  - test -f notebooks/driven_resonator.ipynb
+  - test -f assets/driven_output/port-S.csv
   - python -c "import importlib.util; assert importlib.util.find_spec('qiskit_metal') is not None"
   - python -c "import importlib.util; assert importlib.util.find_spec('SQDMetal') is not None or importlib.util.find_spec('sqdmetal') is not None"
   - python -c "import importlib.util; assert importlib.util.find_spec('pypalace') is not None"
@@ -34,5 +38,8 @@ execution_targets:
     kind: notebook
     timeout_seconds: 2400
   - path: notebooks/electrostatic_LOM.ipynb
+    kind: notebook
+    timeout_seconds: 2400
+  - path: notebooks/driven_resonator.ipynb
     kind: notebook
     timeout_seconds: 2400

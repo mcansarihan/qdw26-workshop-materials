@@ -13,9 +13,11 @@ Recommended notebooks (in order):
 
 1. [`notebooks/eigenmode_EPR.ipynb`](notebooks/eigenmode_EPR.ipynb) — eigenmode + EPR analysis
 2. [`notebooks/electrostatic_LOM.ipynb`](notebooks/electrostatic_LOM.ipynb) — electrostatic + LOM analysis
+3. [`notebooks/driven_resonator.ipynb`](notebooks/driven_resonator.ipynb) — frequency-domain driven simulation + $S_{21}$ fitting (time-permitting)
 
-Supporting files are in `assets/` and `references/`. Reference papers should
-be cited or linked unless redistribution rights are explicit.
+Supporting files are in `assets/` and `references/` (including precomputed
+`assets/driven_output/port-S.csv` for the driven tutorial). Reference papers
+should be cited or linked unless redistribution rights are explicit.
 
 ## Overview
 
@@ -25,7 +27,7 @@ This tutorial is interwoven with a lecture led by Sara Sussman. During the lectu
 * What geometry and physics a simulation must encompass.
 * Open questions and challenges in superconducting circuit modeling.
 * What meshing is and why we need it.
-* Different simulation types and analysis methods used to extract quantum device parameters.
+* Different simulation types — eigenmode, electrostatic, and driven — and analysis methods used to extract quantum device parameters.
 * The classical equations FEM simulations actually solve.
 
 The hands-on portion introduces FEM concepts for superconducting circuits using [pyPalace](https://github.com/FirasAbouzahr/pyPalace), a Python wrapper for AWS Palace with utilities for analyzing superconducting qubits. We simulate the same transmon–resonator device built in the quantum-device-design workshop.

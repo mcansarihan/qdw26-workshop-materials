@@ -3,6 +3,11 @@
 Reference papers are cited in the notebooks rather than redistributed as PDFs
 unless redistribution rights are explicit.
 
+- Elkin, S. T., Khan, G., Forati, E. *et al.* Opportunities and Challenges of
+  Computational Electromagnetics Methods for Superconducting Circuit Quantum
+  Device Modeling: A Practical Review. arXiv:2511.20774 (2025).
+  https://arxiv.org/abs/2511.20774
+
 - Minev, Z. K. et al. Energy-participation quantization of Josephson circuits.
   npj Quantum Inf. **7**, 131 (2021).
   https://doi.org/10.1038/s41534-021-00457-2

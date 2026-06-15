@@ -326,6 +326,26 @@ Stop everything with `docker compose -f compose.deploy.yaml down`.
 > ⚠️ **Pause your workspace between sessions** - _Stop_ it in
 > the Brev console whenever you're not actively in a hands-on session.
 
+### Getting the latest materials
+
+Your workspace comes with all the materials **pre-loaded**, but that copy is a
+snapshot from when the image was built - it is **not a live Git clone**, so
+`git pull` won't update it. If something new lands during the week (a fresh
+notebook or a fix), grab the latest by cloning a fresh copy in any terminal
+(JupyterLab / VS Code / desktop):
+
+```bash
+git clone https://github.com/quantum-device-consortium/qdw26-workshop-materials.git ~/qdw26-latest
+```
+
+Then open the notebooks from the new **`~/qdw26-latest/workshops/…`** folder - the
+Python environment is the same one, so everything just runs. To refresh again
+later, delete that folder and re-clone:
+
+```bash
+rm -rf ~/qdw26-latest && git clone https://github.com/quantum-device-consortium/qdw26-workshop-materials.git ~/qdw26-latest
+```
+
 ### What persists (and what doesn't)
 
 Everything you do lives inside your workspace's container - there are **no

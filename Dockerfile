@@ -98,6 +98,12 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # what lets attendees set breakpoints / use the VS Code & Cursor debuggers against
 # the kernel in this container, so it must NOT be uninstalled.
 
+# scqubits 4.3.1 ships core/qubit_img/Oscillator.jpg, but its Oscillator widget
+# looks for lowercase oscillator.jpg, so scq.Oscillator.create() raises
+# FileNotFoundError on case-sensitive (Linux) filesystems. Add the lowercase alias
+# so the circuit-analysis workshop's Oscillator demo runs.
+RUN .venv/bin/python -c "import os, shutil, scqubits; d = os.path.join(os.path.dirname(scqubits.__file__), 'core', 'qubit_img'); dst = os.path.join(d, 'oscillator.jpg'); (shutil.copyfile(os.path.join(d, 'Oscillator.jpg'), dst) if not os.path.exists(dst) else None); print('scqubits oscillator.jpg alias ensured')"
+
 # Copy workshop materials after dependency installation so dependency layers stay cacheable.
 COPY --chown=ubuntu:ubuntu . /home/ubuntu/qdw-workshop-materials
 

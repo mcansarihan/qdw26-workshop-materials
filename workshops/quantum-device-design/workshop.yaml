@@ -13,6 +13,7 @@ entrypoints:
 notebooks:
   - notebooks/01_welcome.ipynb
   - notebooks/02_first_chip_layout.ipynb
+  - notebooks/02b_routing101.ipynb
   - notebooks/03_transmon_and_resonator.ipynb
   - notebooks/04_qubit_qubit_coupling.ipynb
 assets:
@@ -27,6 +28,7 @@ system_dependencies:
 smoke_commands:
   - test -f notebooks/01_welcome.ipynb
   - test -f notebooks/02_first_chip_layout.ipynb
+  - test -f notebooks/02b_routing101.ipynb
   - python -c "import importlib.util; assert importlib.util.find_spec('qiskit_metal') is not None"
   - python -c "import importlib.util; assert importlib.util.find_spec('SQDMetal') is not None or importlib.util.find_spec('sqdmetal') is not None"
 execution_targets:
@@ -34,6 +36,9 @@ execution_targets:
     kind: notebook
     timeout_seconds: 600
   - path: notebooks/02_first_chip_layout.ipynb
+    kind: notebook
+    timeout_seconds: 900
+  - path: notebooks/02b_routing101.ipynb
     kind: notebook
     timeout_seconds: 900
   - path: notebooks/03_transmon_and_resonator.ipynb

@@ -339,12 +339,20 @@ git clone https://github.com/quantum-device-consortium/qdw26-workshop-materials.
 ```
 
 Then open the notebooks from the new **`~/qdw26-latest/workshops/…`** folder - the
-Python environment is the same one, so everything just runs. To refresh again
-later, delete that folder and re-clone:
+Python environment is the same one, so everything just runs.
+
+**To refresh it later, just pull** (safe - this keeps any work you committed):
 
 ```bash
-rm -rf ~/qdw26-latest && git clone https://github.com/quantum-device-consortium/qdw26-workshop-materials.git ~/qdw26-latest
+cd ~/qdw26-latest && git pull
 ```
+
+> 🛑 **Save your work before deleting anything.** `~/qdw26-latest` is a normal
+> folder you can edit and run notebooks in - so if it holds work you care about,
+> **do not delete it.** Use `git pull` to update in place, and **download or copy
+> out anything important first** (see **[Transferring files](#transferring-files-download--upload)**
+> below). Only delete-and-re-clone if you're certain there's nothing in there you
+> need.
 
 ### What persists (and what doesn't)
 
